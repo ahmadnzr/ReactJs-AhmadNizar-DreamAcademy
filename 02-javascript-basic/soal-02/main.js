@@ -1,5 +1,7 @@
 const checkValidNumber = (arg) => {
-  return typeof arg === "number" && arg >= 0 ? true : false;
+  return typeof arg === "number" && arg >= 0 && Number.isInteger(arg)
+  ? true
+  : false;
 };
 
 const factorial = (number, fn) => {
@@ -13,7 +15,7 @@ const factorial = (number, fn) => {
   return value;
 };
 
-const testCase = [10, 13, 0, -5, "oke", "10", "6", true, 5, 1];
+const testCase = [10, 13, 0, -5, "oke", "10", "6", true, 5.4, 1];
 testCase.forEach((item) => {
   console.log(factorial(item, checkValidNumber));
 });
