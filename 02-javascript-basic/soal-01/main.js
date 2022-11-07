@@ -1,17 +1,13 @@
-const checkName = (name) =>{
-    if(name.length < 20){
-        console.log('Halo,',name)
-        return
-    }
-    if(name.length >= 20){
-        console.log('Panjang umur yang mulia',name)
-        return
-    }
+const checkName = (name) => {
+  if (name.length < 20) return "Halo,", name;
 
-    console.log('Maaf, saya tidak bisa mengeja namanya')
-}
+  if (name.length >= 20) return "Panjang umur yang mulia", name;
 
-checkName("John Due")
-checkName("Sri Sultan Hamengkubuwono I")
-checkName(10)
-checkName(true)
+  return "Maaf, saya tidak bisa mengeja namanya";
+};
+
+const testCase = ["John Due", "Sri Sultan Hamengkubuwono I", 10, true];
+
+testCase.forEach((item) => {
+  console.log(checkName(item));
+});

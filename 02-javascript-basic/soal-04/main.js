@@ -1,9 +1,7 @@
 const checkValidAge = (arg) => {
-  if (typeof arg !== "number") {
-    return false;
-  }
-
-  return arg >= 0 && Number.isInteger(arg) ? true : false;
+  return typeof arg === "number" && arg >= 0 && Number.isInteger(arg)
+    ? true
+    : false;
 };
 
 const checkAge = (age, fn) => {
@@ -15,9 +13,8 @@ const checkAge = (age, fn) => {
   if (age > 60) return "tua";
 };
 
-console.log("Anda adalah seorang", checkAge(0, checkValidAge));
-console.log("Anda adalah seorang", checkAge(10, checkValidAge));
-console.log("Anda adalah seorang", checkAge("50", checkValidAge));
-console.log("Anda adalah seorang", checkAge(29.5, checkValidAge));
-console.log("Anda adalah seorang", checkAge("muda", checkValidAge));
-console.log("Anda adalah seorang", checkAge(true, checkValidAge));
+const testCase = [0, 10, "50", 29.5, "muda", true, 18];
+
+testCase.forEach((item) => {
+  console.log("Anda adalah seorang", checkAge(item, checkValidAge));
+});
