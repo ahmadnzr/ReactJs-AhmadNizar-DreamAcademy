@@ -1,7 +1,7 @@
 const checkName = (name) => {
-  if (name.length < 20) return "Halo,", name;
+  if (name.length < 20) return "Halo, "+ name;
 
-  if (name.length >= 20) return "Panjang umur yang mulia", name;
+  if (name.length >= 20) return "Panjang umur yang mulia "+ name;
 
   return "Maaf, saya tidak bisa mengeja namanya";
 };
