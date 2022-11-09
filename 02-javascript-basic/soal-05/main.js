@@ -1,7 +1,7 @@
 const checkName = (name) => {
-  if (name?.length < 20) return "Halo,", name;
+  if (name?.length < 20) return "Halo, " + name;
 
-  if (name?.length >= 20) return "Panjang umur yang mulia", name;
+  if (name?.length >= 20) return "Panjang umur yang mulia " + name;
 
   return "Maaf, saya tidak bisa mengeja namanya";
 };
@@ -34,6 +34,7 @@ const userInfo = (obj) => {
 
 const testCase = [
   { name: "Jokowwei", age: 50 },
+  { name: "Sri Sultan Hamengkubuwono I", age: 50 },
   { name: "Prabowo" },
   { name: "" },
   null,
@@ -44,6 +45,6 @@ const testCase = [
   "",
 ];
 
-testCase.forEach((item) =>{
-  console.log(userInfo(item))
-})
+testCase.forEach((item) => {
+  console.log(userInfo(item));
+});
