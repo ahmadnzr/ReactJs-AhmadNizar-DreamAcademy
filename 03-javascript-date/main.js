@@ -20,7 +20,7 @@ const formatDate = (str) => {
 
 const getDiff = (date1, date2) => {
   const diff = date1.getTime() - date2.getTime();
-  return Math.round(diff / (1000 * 3600 * 24));
+  return diff / (1000 * 3600 * 24);
 };
 
 const productDetails = products.map((product) => {
