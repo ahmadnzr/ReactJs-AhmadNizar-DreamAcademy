@@ -1,5 +1,5 @@
 const checkValidText = (text) => {
-  const validText = new RegExp(/[a-z]/gi);
+  const validText = new RegExp(/[a-z]/i);
 
   return validText.test(text);
 };
