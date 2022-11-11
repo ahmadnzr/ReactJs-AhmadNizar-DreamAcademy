@@ -32,7 +32,7 @@ const info = (date) => {
 
   return {
     age: age > 0 ? age : 0,
-    birthdayIn: Math.round((birthday - now.getTime()) / (1000 * 3600 * 24)),
+    birthdayIn: Math.ceil((birthday - now.getTime()) / (1000 * 3600 * 24)),
   };
 };
 
@@ -50,6 +50,6 @@ const infoWithMoment = (date) => {
 
   return {
     age: age > 0 ? age : 0,
-    birthdayIn: Math.round(birthday.diff(now, "day", true)),
+    birthdayIn: Math.ceil(birthday.diff(now, "day", true)),
   };
 };
