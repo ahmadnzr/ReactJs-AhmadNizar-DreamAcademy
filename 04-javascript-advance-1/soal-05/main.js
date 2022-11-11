@@ -1,17 +1,18 @@
-const checkValidText = (text) => {
+const checkValidText = (char) => {
   const validText = new RegExp(/[a-z]/i);
 
-  return validText.test(text);
+  return validText.test(char);
 };
 
-const checkVokalText = (text) => {
+const checkVokalText = (char) => {
   const vocal = ["a", "i", "u", "e", "o"];
 
-  return vocal.includes(text) ? "vokal" : "konsonan";
+  return vocal.includes(char) ? "vokal" : "konsonan";
 };
 
-["mempertanggunjawabkan", "merdeka!", "100", "Amin"].map((word) => {
-  const w = word
+document.getElementById("myInput").addEventListener("change", (e) => {
+  const text = e.target.value;
+  const w = text
     .toLowerCase()
     .split("")
     .map((char) => {
@@ -19,5 +20,7 @@ const checkVokalText = (text) => {
       return valid ? checkVokalText(char) : "invalid";
     });
 
-  console.log(w.toString());
+  document.getElementById("text").innerHTML = text;
+  document.getElementById("result").innerHTML = w.toString();
+  e.target.value = "";
 });
