@@ -10,11 +10,14 @@ const checkVokalText = (text) => {
   return vocal.includes(text) ? "vokal" : "konsonan";
 };
 
-["mempertanggunjawabkan", "merdeka!", "100", " "].map((word) => {
-  const w = word.split("").map((char) => {
-    const valid = checkValidText(char);
-    return valid ? checkVokalText(char) : "invalid";
-  });
+["mempertanggunjawabkan", "merdeka!", "100", "Amin"].map((word) => {
+  const w = word
+    .toLowerCase()
+    .split("")
+    .map((char) => {
+      const valid = checkValidText(char);
+      return valid ? checkVokalText(char) : "invalid";
+    });
 
   console.log(w.toString());
 });
