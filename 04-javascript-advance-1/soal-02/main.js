@@ -28,10 +28,11 @@ const info = (date) => {
     born.getMonth(),
     born.getDate()
   ).getTime();
+  const age = new Date(now - born.getTime()).getUTCFullYear() - 1970;
 
   return {
-    age: new Date(now - born.getTime()).getUTCFullYear() - 1970,
-    birthdayIn: Math.trunc((birthday - now.getTime()) / (1000 * 3600 * 24)),
+    age: age > 0 ? age : 0,
+    birthdayIn: Math.round((birthday - now.getTime()) / (1000 * 3600 * 24)),
   };
 };
 
@@ -47,6 +48,6 @@ const infoWithMoment = (date) => {
 
   return {
     age: now.diff(born, "year"),
-    birthdayIn: birthday.diff(now, "day"),
+    birthdayIn: Math.round(birthday.diff(now, "day", true)),
   };
 };
