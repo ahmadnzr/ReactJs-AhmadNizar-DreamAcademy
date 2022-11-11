@@ -46,8 +46,10 @@ const infoWithMoment = (date) => {
     date: born.date(),
   });
 
+  const age = now.diff(born, "year");
+
   return {
-    age: now.diff(born, "year"),
+    age: age > 0 ? age : 0,
     birthdayIn: Math.round(birthday.diff(now, "day", true)),
   };
 };
