@@ -11,7 +11,7 @@ const startUndian = () => {
   numberg.innerHTML = "0";
   if (!undi) {
     undi = setInterval(() => {
-      number = Math.trunc(Math.random() * 99);
+      number = Math.trunc(Math.random() * 100);
       numberg.innerHTML = number;
     }, 30);
   }
