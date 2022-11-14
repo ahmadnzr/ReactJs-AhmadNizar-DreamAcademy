@@ -124,7 +124,6 @@ const editButtons = document.querySelectorAll(".edit");
 Array.from(editButtons).map((btn) => {
   btn.addEventListener("click", (e) => {
     const todo = todos.find((todo) => todo.no == e.target.id);
-    console.log(todo);
     title.value = todo.title;
     todoStatus.checked = todo.status;
     todoId.value = todo.no;
