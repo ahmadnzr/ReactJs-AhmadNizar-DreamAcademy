@@ -10,7 +10,7 @@ const checkVokalText = (char) => {
   return vocal.includes(char) ? "vokal" : "konsonan";
 };
 
-document.getElementById("myInput").addEventListener("change", (e) => {
+document.getElementById("myInput").addEventListener("keyup", (e) => {
   const text = e.target.value;
   const w = text
     .toLowerCase()
@@ -22,5 +22,5 @@ document.getElementById("myInput").addEventListener("change", (e) => {
 
   document.getElementById("text").innerHTML = text;
   document.getElementById("result").innerHTML = w.toString();
-  e.target.value = "";
+  // e.target.value = "";
 });
