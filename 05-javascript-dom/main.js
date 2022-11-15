@@ -10,17 +10,6 @@ const allTodos = localStorage.getItem("todos");
 
 const todos = JSON.parse(allTodos) || [];
 
-myTable.innerHTML = `
-      <thead>
-        <tr>
-            <th class="w-10 text-left">No</th>
-            <th class="w-60 text-left">Title</th>
-            <th class="w-40 text-left">Status</th>
-            <th class="w-32 text-left">Action</th>
-        </tr>
-      </thead>
-    `;
-
 title.focus();
 
 const createElement = (elemenet) => {
