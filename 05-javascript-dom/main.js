@@ -16,9 +16,9 @@ const createElement = (elemenet) => {
   return document.createElement(elemenet);
 };
 
-const getColumnText = (array, objectKey) => {
+const getColumnText = (array, objectKey, index) => {
   if (objectKey === "no") {
-    return array[objectKey] + 1;
+    return index + 1;
   }
 
   if (objectKey === "status") {
@@ -49,7 +49,7 @@ todos.map((row, i) => {
 
   Object.keys(row).map((r) => {
     const colEl = createElement("td");
-    const textEl = getColumnText(row, r);
+    const textEl = getColumnText(row, r, i);
 
     const text = document.createTextNode(`${textEl}`);
     colEl.appendChild(text);
@@ -76,16 +76,17 @@ todos.map((row, i) => {
 form.addEventListener("submit", (e) => {
   // e.preventDefault()
   let todo = {};
-  if (Array.from(e.target.classList).includes("edit")) {
+  if (todoId.value) {
     todo = {
-      no: Number(todoId.value),
+      no: todoId.value,
       title: title.value,
       status: todoStatus.checked,
     };
-    todos[todo.no] = todo;
+    const indexEdit = todos.findIndex(todo => todo.no == todoId.value)
+    todos[indexEdit] = todo;
   } else {
     todo = {
-      no: todos[todos?.length - 1]?.no + 1 || 0,
+      no: new Date().getTime(),
       title: title.value,
       status: todoStatus.checked,
     };
@@ -117,6 +118,5 @@ Array.from(editButtons).map((btn) => {
     todoStatus.checked = todo.status;
     todoId.value = todo.no;
     add.innerHTML = "SAVE";
-    form.classList.add("edit");
   });
 });
