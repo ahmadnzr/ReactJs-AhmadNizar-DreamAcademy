@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Javascript Async</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          container: {
+            padding: "5rem",
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <nav class="h-14 bg-gray-100 sticky top-0 left-0 right-0">
+      <div class="container mx-auto h-full flex items-center justify-end">
+        <select
+          class="w-40 cursor-pointer outline-none px-2 py-1"
+          name="users-list"
+          id="users-list"
+        >
+          <option class="" value="1">Nizar</option>
+          <option class="" value="1">Nizar</option>
+        </select>
+      </div>
+    </nav>
+    <div class="container mx-auto">
+      <div class="my-10 flex items-center justify-between">
+        <h1 class="text-xl font-bold">POST</h1>
+        <button
+          class="bg-gray-100 px-4 py-2 rounded-sm hover:opacity-70"
+          id="add-post"
+        >
+          Add New
+        </button>
+      </div>
+      <table class="border" id="post-table">
+        <thead>
+          <tr>
+            <th class="border">ID</th>
+            <th class="border">Title</th>
+            <th class="border">Author</th>
+            <th class="border">Created At</th>
+            <th class="border">Last Modified</th>
+            <th class="border">Published</th>
+            <th class="border">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+          </tr>
+          <tr>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+            <td class="border">test</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      id="modal"
+      class="absolute top-0 right-0 h-screen w-screen flex flex-col gap-4 items-center justify-center bg-black bg-opacity-30"
+    >
+      <button class="text-white font-bold" id="close-modal">CLOSE</button>
+      <div class="bg-white w-[50%] min-h-[500px] rounded-sm shadow-xl p-5">
+        <h1 class="text-xl font-bold text-center mb-10">[ADD/EDIT] Post</h1>
+        <form action="" class="flex flex-col gap-4">
+          <div class="flex items-start">
+            <label for="title" class="w-[20%]">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              class="flex-1 px-2 py-1 border outline-none"
+            />
+          </div>
+          <div class="flex items-start">
+            <label for="body" class="w-[20%]">Body</label>
+            <textarea
+              rows="10"
+              class="flex-1 px-2 py-1 border outline-none"
+              id="body"
+            ></textarea>
+          </div>
+          <div class="flex items-center">
+            <label for="publish" class="w-[20%]">Publish</label>
+            <input type="checkbox" id="publish" />&nbsp;Yes
+          </div>
+          <button class="bg-gray-100 py-3 rounded-sm hover:opacity-70">
+            SAVE
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script>
+      $("#modal").hide();
+      $("#add-post").click(function () {
+        $("#modal").show();
+      });
+      $("#close-modal").click(function () {
+        $("#modal").hide();
+      });
+      $(document).ready(function () {
+        $("#post-table").DataTable({
+          searching: false,
+          ordering: false,
+          lengthChange: false,
+          pageLength: 10,
+        });
+      });
+    </script>
+    <script src="./main.js"></script>
+  </body>
+</html>
