@@ -39,6 +39,17 @@ const getUsers = () => {
   });
 };
 
+const getPost = (postId) => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: "get",
+      url: BASE_URL + "posts/" + postId,
+    })
+      .done((res) => resolve(res))
+      .fail((err) => reject(err));
+  });
+};
+
 const getPosts = () => {
   const posts = new Promise((resolve, reject) => {
     $.ajax({
@@ -97,6 +108,32 @@ const deletePost = (postId) => {
   });
 };
 
+const updatePost = ({ postId, title, body, published }) => {
+  return new Promise((resolve, reject) => {
+    if (!title || !body || !postId) {
+      reject("There is an error while updating the post");
+    }
+
+    $.ajax({
+      url: BASE_URL + "posts/" + postId,
+      type: "PATCH",
+      contentType: "application/json",
+      data: JSON.stringify({
+        title,
+        body,
+        published,
+        lastModified: new Date().getTime(),
+      }),
+    })
+      .done(() => {
+        resolve("Post successfully edited!");
+      })
+      .fail(() => {
+        reject("There is an error while updating the post");
+      });
+  });
+};
+
 const displayContent = wrapper(async () => {
   $("#modal-loading").show();
 
@@ -111,7 +148,7 @@ const displayContent = wrapper(async () => {
     $("#user-list").append(option);
   });
 
-  const table = $("#post-table").DataTable({
+  $("#post-table").DataTable({
     searching: false,
     // ordering: false,
     lengthChange: false,
@@ -165,8 +202,8 @@ const displayContent = wrapper(async () => {
         data: "action",
         mRender: (dt, type, row) => {
           if ($("#user-list").val() == row.authorId) {
-            return `<button class="bg-yellow-100 hover:bg-yellow-200 px-2 py-1 text-xs rounded-sm">[Edit]</button>
-            <button class="delete bg-red-100 px-2 hover:bg-red-200 py-1 text-xs rounded-sm" id="${row.id}">[Hapus]</button>`;
+            return `<button class="edit bg-yellow-100 hover:bg-yellow-200 px-2 py-1 text-xs rounded-sm" id="edit-${row.id}">[Edit]</button>
+            <button class="delete bg-red-100 px-2 hover:bg-red-200 py-1 text-xs rounded-sm" id="delete-${row.id}">[Hapus]</button>`;
           }
 
           return `<span class='text-xs'>Not Allowed</span>`;
@@ -187,7 +224,8 @@ $("#user-list").change((e) => {
 });
 
 $("#modal-form").submit(
-  wrapper(async () => {
+  wrapper(async (e) => {
+    // e.preventDefault();
     $("#modal").hide();
     $("#modal-loading").show();
 
@@ -195,14 +233,34 @@ $("#modal-form").submit(
     const body = $("#body").val();
     const published = $("#publish").prop("checked");
 
+    const isForEdit = $("#modal").prop("class").split(" ").includes("edit");
+
+    if (isForEdit) {
+      await updatePost({ title, body, published, postId: $("#postId").html() });
+      return;
+    }
+
     await createPost({ title, body, published });
   })
 );
 
 $("#post-table").on("click", ".delete", async (e) => {
-  if (confirm("Are you sure to delete post with id = " + e.target.id + "?")) {
-    await deletePost(e.target.id);
+  const id = e.target.id.split("-")[1];
+  if (confirm("Are you sure to delete post with id = " + id + "?")) {
+    await deletePost(id);
     window.location.reload();
   }
   return;
+});
+
+$("#post-table").on("click", ".edit", async (e) => {
+  const id = e.target.id.split("-")[1];
+  const post = await getPost(id);
+
+  $("#modal").show();
+  $("#modal").addClass("edit");
+  $("#modal-title").html(`Edit post with id <span id="postId">${id}</span>`);
+  $("#title").val(post.title);
+  $("#body").val(post.body);
+  $("#publish").prop("checked", post.published);
 });
