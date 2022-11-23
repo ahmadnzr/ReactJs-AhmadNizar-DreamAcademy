@@ -86,6 +86,17 @@ const createPost = ({ title, body, published }) => {
   });
 };
 
+const deletePost = (postId) => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: "delete",
+      url: BASE_URL + "posts/" + postId,
+    })
+      .done((res) => resolve(res))
+      .fail((err) => reject(err));
+  });
+};
+
 const displayContent = wrapper(async () => {
   $("#modal-loading").show();
 
@@ -100,18 +111,24 @@ const displayContent = wrapper(async () => {
     $("#user-list").append(option);
   });
 
-  $("#post-table").DataTable({
+  const table = $("#post-table").DataTable({
     searching: false,
-    ordering: false,
+    // ordering: false,
     lengthChange: false,
     pageLength: 10,
     responsive: true,
     data: data[1],
+    fixedColumns: true,
     columns: [
-      { data: "id" },
+      {
+        data: "id",
+        mRender: (dt, type, row, meta) => {
+          return `<td>${meta.row + 1}</td>`;
+        },
+      },
       {
         data: "title",
-        mRender: (dt, type, row) => {
+        mRender: (dt, type, row, meta) => {
           return `<a href="#${row.id}" class='text-green-700 hover:underline'>${row.title}</a>`;
         },
         width: "25%",
@@ -148,11 +165,13 @@ const displayContent = wrapper(async () => {
         data: "action",
         mRender: (dt, type, row) => {
           if ($("#user-list").val() == row.authorId) {
-            return `<button class="bg-yellow-100 px-2 py-1 text-xs rounded-sm">[Edit]</button>&nbsp;<button class="bg-red-100 px-2 py-1 text-xs rounded-sm">[Hapus]</button>`;
+            return `<button class="bg-yellow-100 hover:bg-yellow-200 px-2 py-1 text-xs rounded-sm">[Edit]</button>
+            <button class="delete bg-red-100 px-2 hover:bg-red-200 py-1 text-xs rounded-sm" id="${row.id}">[Hapus]</button>`;
           }
 
           return `<span class='text-xs'>Not Allowed</span>`;
         },
+        className: "action",
       },
     ],
   });
@@ -161,6 +180,11 @@ const displayContent = wrapper(async () => {
 });
 
 displayContent();
+
+$("#user-list").change((e) => {
+  localStorage.setItem("currentUserId", JSON.stringify(e.target.value));
+  window.location.reload();
+});
 
 $("#modal-form").submit(
   wrapper(async () => {
@@ -175,7 +199,10 @@ $("#modal-form").submit(
   })
 );
 
-document.getElementById("user-list").addEventListener("change", (e) => {
-  localStorage.setItem("currentUserId", JSON.stringify(e.target.value));
-  window.location.reload()
+$("#post-table").on("click", ".delete", async (e) => {
+  if (confirm("Are you sure to delete post with id = " + e.target.id + "?")) {
+    await deletePost(e.target.id);
+    window.location.reload();
+  }
+  return;
 });
