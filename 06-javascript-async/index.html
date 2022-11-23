@@ -6,11 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Javascript Async</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"
     />
+
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -27,15 +33,12 @@
         <select
           class="w-40 cursor-pointer outline-none px-2 py-1"
           name="users-list"
-          id="users-list"
-        >
-          <option class="" value="1">Nizar</option>
-          <option class="" value="1">Nizar</option>
-        </select>
+          id="user-list"
+        ></select>
       </div>
     </nav>
-    <div class="container mx-auto">
-      <div class="my-10 flex items-center justify-between">
+    <div class="container mx-auto py-10">
+      <div class="flex items-center justify-between">
         <h1 class="text-xl font-bold">POST</h1>
         <button
           class="bg-gray-100 px-4 py-2 rounded-sm hover:opacity-70"
@@ -44,38 +47,19 @@
           Add New
         </button>
       </div>
-      <table class="border" id="post-table">
+      <table class="display" id="post-table">
         <thead>
           <tr>
-            <th class="border">ID</th>
-            <th class="border">Title</th>
-            <th class="border">Author</th>
-            <th class="border">Created At</th>
-            <th class="border">Last Modified</th>
-            <th class="border">Published</th>
-            <th class="border">Action</th>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Created At</th>
+            <th>Last Modified </th>
+            <th>Published</th>
+            <th id="action">Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-          </tr>
-          <tr>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-            <td class="border">test</td>
-          </tr>
-        </tbody>
+        <tbody id="table-body"></tbody>
       </table>
     </div>
 
@@ -84,9 +68,13 @@
       class="absolute top-0 right-0 h-screen w-screen flex flex-col gap-4 items-center justify-center bg-black bg-opacity-30"
     >
       <button class="text-white font-bold" id="close-modal">CLOSE</button>
-      <div class="bg-white w-[50%] min-h-[500px] rounded-sm shadow-xl p-5">
-        <h1 class="text-xl font-bold text-center mb-10">[ADD/EDIT] Post</h1>
-        <form action="" class="flex flex-col gap-4">
+      <div
+        class="bg-white w-full md:w-[50%] min-h-[500px] rounded-sm shadow-xl p-5"
+      >
+        <h1 class="text-xl font-bold text-center mb-10" id="modal-title">
+          Add New Post
+        </h1>
+        <form action="" class="flex flex-col gap-4" id="modal-form">
           <div class="flex items-start">
             <label for="title" class="w-[20%]">Title</label>
             <input
@@ -94,6 +82,7 @@
               id="title"
               name="title"
               class="flex-1 px-2 py-1 border outline-none"
+              required
             />
           </div>
           <div class="flex items-start">
@@ -102,6 +91,7 @@
               rows="10"
               class="flex-1 px-2 py-1 border outline-none"
               id="body"
+              required
             ></textarea>
           </div>
           <div class="flex items-center">
@@ -115,24 +105,25 @@
       </div>
     </div>
 
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <div
+      id="modal-loading"
+      class="absolute top-0 right-0 h-screen w-screen flex flex-col gap-4 items-center justify-center bg-black bg-opacity-30"
+    >
+      <img src="./src/loading.png" alt="" class="h-10 w-10 animate-spin" />
+    </div>
+
     <script>
       $("#modal").hide();
+      $("#modal-loading").hide();
+
       $("#add-post").click(function () {
         $("#modal").show();
       });
+
       $("#close-modal").click(function () {
         $("#modal").hide();
       });
-      $(document).ready(function () {
-        $("#post-table").DataTable({
-          searching: false,
-          ordering: false,
-          lengthChange: false,
-          pageLength: 10,
-        });
-      });
     </script>
-    <script src="./main.js"></script>
+    <script src="./src/main.js"></script>
   </body>
 </html>
