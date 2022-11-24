@@ -20,7 +20,7 @@ const currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
 const getUserList = async () => {
   const userList = await getUsers();
   userList.map((user) => {
-    const selected = user.id == currentUser.id ? "selected" : null;
+    const selected = user.id == currentUser?.id ? "selected" : null;
     const option = `<option value='${user.id}' ${selected}>${user.username}</option>`;
     $("#user-list").append(option);
   });
