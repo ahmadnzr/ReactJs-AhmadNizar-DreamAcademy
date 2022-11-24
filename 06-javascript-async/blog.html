@@ -18,22 +18,12 @@
     </script>
   </head>
   <body>
-    <nav class="h-14 bg-gray-100 sticky top-0 left-0 right-0">
-      <div class="container mx-auto h-full flex items-center justify-end">
-        <select
-          class="w-40 cursor-pointer outline-none px-2 py-1"
-          name="users-list"
-          id="users-list"
-        >
-          <option class="" value="1">Nizar</option>
-          <option class="" value="1">Nizar</option>
-        </select>
-      </div>
-    </nav>
-    <div class="container mx-auto flex flex-col space-y-5 mb-10">
+    <div class="w-full md:container mx-auto flex flex-col space-y-5 mb-10">
       <div class="text-center mt-10">
-        <h1 class="text-xl font-bold">Blog Title</h1>
-        <span class="text-sm mt-4 block">By Jokowi at Januari 2019</span>
+        <h1 class="text-xl font-bold" id="post-title">Blog Title</h1>
+        <span class="text-sm mt-4 block" id="post-detail"
+          >By Jokowi at Januari 2019</span
+        >
       </div>
       <img
         src="https://source.unsplash.com/random/1080x720/"
@@ -41,79 +31,29 @@
         class="h-[350px] w-full object-cover"
       />
 
-      <div class="flex flex-col space-y-4">
-        <p class="text-justify">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, illo!
-        </p>
-        <p class="text-justify">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit
-          ullam sapiente ducimus repellendus, tempora laboriosam officia saepe,
-          veniam, nam sit possimus assumenda. Ea natus pariatur maxime sed.
-          Fugiat optio dolor a voluptate, nulla explicabo exercitationem
-          temporibus alias deleniti consectetur vel laborum praesentium
-          consequuntur repellendus maiores eveniet facilis, possimus reiciendis
-          est aut inventore! Corporis fugit numquam ipsam ullam nisi inventore
-          aspernatur asperiores quaerat veritatis. Quod sint aspernatur vel
-          minus laboriosam sed adipisci praesentium? Laudantium, voluptatum.
-          Quisquam, tenetur cupiditate facere, maiores harum sapiente quibusdam
-          ullam minus expedita dolore libero hic neque molestiae atque debitis
-          iusto nisi, iste optio! Consequatur quod cumque sit.
-        </p>
-        <p class="text-justify">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-          dolorem ab aspernatur tempore saepe sapiente reprehenderit et.
-          Aspernatur perspiciatis deserunt iste, cupiditate accusamus ducimus at
-          quibusdam omnis quidem neque pariatur itaque eos, quasi suscipit fuga
-          minima ea eius sunt velit aperiam a distinctio amet in beatae. Nobis
-          sequi error corporis ab, dignissimos ipsam quas! Sint illo quae ipsum
-          dolorum quia blanditiis dolor nostrum aut accusamus non laudantium sed
-          unde maxime eum explicabo, minus autem voluptatum nisi libero nihil
-          aliquid perferendis similique nesciunt tempora? Illum error a enim!
-          Molestias sunt quos laborum? Ducimus ex maiores dolorum tempora.
-          Doloremque nam quis dolorem.
-        </p>
-      </div>
-      <div class="flex flex-col space-y-4">
+      <div class="px-16 md:px-0 flex flex-col space-y-4" id="post-body"></div>
+      <div class="px-16 md:px-0 flex flex-col space-y-4">
         <h2 class="text-xl font-bold">Comments</h2>
-        <div class="flex flex-col space-y-2">
-          <div class="flex flex-col gap-2 text-sm">
-            <div class="flex items-center justify-start space-x-3">
-              <img
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXw3NjA4Mjc3NHx8ZW58MHx8fHw%3D&w=1000&q=80"
-                alt=""
-                class="h-10 w-h-10 rounded-full"
-              />
-              <strong>Prabowo | 20/12/2022 11:11:11</strong>
-            </div>
-            <p>"Jelek gini"</p>
-          </div>
-          <div class="flex flex-col gap-2 text-sm">
-            <div class="flex items-center justify-start space-x-3">
-              <img
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXw3NjA4Mjc3NHx8ZW58MHx8fHw%3D&w=1000&q=80"
-                alt=""
-                class="h-10 w-h-10 rounded-full"
-              />
-              <strong>Prabowo | 20/12/2022 11:11:11</strong>
-            </div>
-            <p>"Jelek gini"</p>
-          </div>
-        </div>
+        <div class="flex flex-col space-y-2" id="post-comments"></div>
         <h2 class="text-xl font-bold">Say Something</h2>
-        <form action="" class="w-full flex flex-col gap-4">
+        <form action="" class="w-full flex flex-col gap-4" id="form-comment">
           <textarea
             name=""
-            id=""
             rows="10"
             class="px-2 py-1 border outline-none w-full"
+            id="message"
           ></textarea>
           <button
             class="bg-gray-100 px-4 py-2 rounded-sm hover:opacity-70 self-end"
           >
-            Submit
+            Comment
           </button>
         </form>
       </div>
     </div>
+    <script src="./src/modal.js"></script>
+    <script src="./src/functions.js"></script>
+    <script src="./src/nav.js"></script>
+    <script src="./src/blog.js"></script>
   </body>
 </html>

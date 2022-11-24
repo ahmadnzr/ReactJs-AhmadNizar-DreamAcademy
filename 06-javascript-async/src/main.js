@@ -1,152 +1,7 @@
-const BASE_URL = "http://localhost:3000/";
-
-const wrapper = (callback) => {
-  try {
-    return callback;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const formatDate = (date) => {
-  const newDate = new Date(date);
-  return new Intl.DateTimeFormat("default", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-  })
-    .format(newDate)
-    .split(",")
-    .join(" ");
-};
-
-const getUsers = () => {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: "get",
-      url: BASE_URL + "users",
-    })
-      .done((res) => {
-        resolve(res);
-      })
-      .fail((err) => {
-        reject(err);
-      });
-  });
-};
-
-const getPost = (postId) => {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: "get",
-      url: BASE_URL + "posts/" + postId,
-    })
-      .done((res) => resolve(res))
-      .fail((err) => reject(err));
-  });
-};
-
-const getPosts = () => {
-  const posts = new Promise((resolve, reject) => {
-    $.ajax({
-      url: BASE_URL + "posts",
-      type: "get",
-    })
-      .done((res) => {
-        resolve(res);
-      })
-      .fail((err) => {
-        reject(err);
-      });
-  });
-
-  return posts;
-};
-
-const createPost = ({ title, body, published }) => {
-  return new Promise((resolve, reject) => {
-    if (!title || !body) {
-      reject("There is an error while creating the post");
-    }
-
-    const authorId = parseInt($("#user-list").val());
-
-    $.ajax({
-      url: BASE_URL + "posts",
-      type: "post",
-      contentType: "application/json",
-      data: JSON.stringify({
-        title,
-        body,
-        published,
-        authorId,
-        createdAt: new Date().getTime(),
-        lastModified: new Date().getTime(),
-      }),
-    })
-      .done(() => {
-        resolve("Post successfully created!");
-      })
-      .fail(() => {
-        reject("There is an error while creating the post");
-      });
-  });
-};
-
-const deletePost = (postId) => {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: "delete",
-      url: BASE_URL + "posts/" + postId,
-    })
-      .done((res) => resolve(res))
-      .fail((err) => reject(err));
-  });
-};
-
-const updatePost = ({ postId, title, body, published }) => {
-  return new Promise((resolve, reject) => {
-    if (!title || !body || !postId) {
-      reject("There is an error while updating the post");
-    }
-
-    $.ajax({
-      url: BASE_URL + "posts/" + postId,
-      type: "PATCH",
-      contentType: "application/json",
-      data: JSON.stringify({
-        title,
-        body,
-        published,
-        lastModified: new Date().getTime(),
-      }),
-    })
-      .done(() => {
-        resolve("Post successfully edited!");
-      })
-      .fail(() => {
-        reject("There is an error while updating the post");
-      });
-  });
-};
-
 const displayContent = wrapper(async () => {
   $("#modal-loading").show();
 
   const data = await Promise.all([getUsers(), getPosts()]);
-
-  const currentUserId =
-    JSON.parse(localStorage.getItem("currentUserId")) || null;
-
-  data[0].map((user) => {
-    const selected = user.id == currentUserId ? "selected" : null;
-    const option = `<option value='${user.id}' ${selected}>${user.username}</option>`;
-    $("#user-list").append(option);
-  });
 
   $("#post-table").DataTable({
     searching: false,
@@ -166,7 +21,7 @@ const displayContent = wrapper(async () => {
       {
         data: "title",
         mRender: (dt, type, row, meta) => {
-          return `<a href="#${row.id}" class='text-green-700 hover:underline'>${row.title}</a>`;
+          return `<a href="blog.html#${row.id}" class='detail text-green-700 hover:underline'>${row.title}</a>`;
         },
         width: "25%",
       },
@@ -217,11 +72,6 @@ const displayContent = wrapper(async () => {
 });
 
 displayContent();
-
-$("#user-list").change((e) => {
-  localStorage.setItem("currentUserId", JSON.stringify(e.target.value));
-  window.location.reload();
-});
 
 $("#modal-form").submit(
   wrapper(async (e) => {
