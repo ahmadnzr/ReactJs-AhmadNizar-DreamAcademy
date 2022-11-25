@@ -1,3 +1,5 @@
+import { getUser, getUsers } from "./functions.js";
+
 const userList = `
     <div class="w-full md:container mx-auto h-full flex items-center justify-between">
         <h1 class="font-bold text-xl hover:underline"><a href="/06-javascript-async/">Home</a></h1>

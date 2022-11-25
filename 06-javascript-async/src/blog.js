@@ -1,3 +1,5 @@
+import {wrapper,getCommentByPostId,formatDate, getPost, getUser,createComment} from './functions.js'
+
 const postTitle = $("#post-title");
 const postDetail = $("#post-detail");
 const postBody = $("#post-body");

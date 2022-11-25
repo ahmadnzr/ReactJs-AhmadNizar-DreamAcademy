@@ -1,3 +1,14 @@
+import {
+  wrapper,
+  getUsers,
+  getPosts,
+  formatDate,
+  createPost,
+  updatePost,
+  deletePost,
+  getPost,
+} from "./functions.js";
+
 const displayContent = wrapper(async () => {
   $("#modal-loading").show();
 

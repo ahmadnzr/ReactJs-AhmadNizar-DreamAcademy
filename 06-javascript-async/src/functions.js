@@ -186,3 +186,17 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("currentUser")) || null;
 };
 
+export {
+  wrapper,
+  formatDate,
+  getCommentByPostId,
+  getCurrentUser,
+  getPost,
+  getPosts,
+  getUser,
+  getUsers,
+  createComment,
+  createPost,
+  deletePost,
+  updatePost
+};
