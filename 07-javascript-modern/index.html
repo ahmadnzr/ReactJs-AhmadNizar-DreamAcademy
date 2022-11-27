@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Javascript Async</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"
+    />
+
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          container: {
+            padding: "5rem",
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div class="w-full md:container mx-auto py-10">
+      <div class="flex items-center justify-between">
+        <h1 class="text-xl font-bold">POST</h1>
+        <button
+          class="bg-gray-100 px-4 py-2 rounded-sm hover:opacity-70"
+          id="add-post"
+        >
+          Add New
+        </button>
+      </div>
+      <table class="display" id="post-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Created At</th>
+            <th>Last Modified</th>
+            <th>Published</th>
+            <th id="action">Action</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+
+    <div
+      id="modal"
+      class="absolute top-0 right-0 h-screen w-screen flex flex-col gap-4 items-center justify-center bg-black bg-opacity-30"
+    >
+      <button class="text-white font-bold" id="close-modal">CLOSE</button>
+      <div
+        class="bg-white w-full md:w-[50%] min-h-[500px] rounded-sm shadow-xl p-5"
+      >
+        <h1 class="text-xl font-bold text-center mb-10" id="modal-title"></h1>
+        <form action="" class="flex flex-col gap-4" id="modal-form">
+          <div class="flex items-start">
+            <label for="title" class="w-[20%]">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              class="flex-1 px-2 py-1 border outline-none"
+              required
+            />
+          </div>
+          <div class="flex items-start">
+            <label for="body" class="w-[20%]">Body</label>
+            <textarea
+              rows="10"
+              class="flex-1 px-2 py-1 border outline-none"
+              id="body"
+              required
+            ></textarea>
+          </div>
+          <div class="flex items-center">
+            <label for="publish" class="w-[20%]">Publish</label>
+            <input type="checkbox" id="publish" />&nbsp;Yes
+          </div>
+          <button class="bg-gray-100 py-3 rounded-sm hover:opacity-70">
+            SAVE
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="./src/modal.js"></script>
+    <script>
+      $("#modal").hide();
+
+      $("#add-post").click(function () {
+        $("#modal").show();
+        $("#modal").removeClass("edit");
+        $("#modal-title").html("Add New Post");
+        $("#title").val("").focus();
+        $("#body").val("");
+        $("#publish").prop("checked", false);
+      });
+
+      $("#close-modal").click(function () {
+        $("#modal").hide();
+      });
+    </script>
+    <script type="module" src="./src/nav.js"></script>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
