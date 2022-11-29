@@ -1,9 +1,13 @@
-import {wrapper,getCommentByPostId,formatDate, getPost, getUser,createComment} from './functions.js'
-
-const postTitle = $("#post-title");
-const postDetail = $("#post-detail");
-const postBody = $("#post-body");
-const postComment = $("#post-comments");
+import createDetailPage from "./content/detail.js";
+import {
+  wrapper,
+  getCommentByPostId,
+  formatDate,
+  getPost,
+  getUser,
+  createComment,
+  getCurrentUser,
+} from "./functions.js";
 
 const newFormatDate = (date) => {
   return new Intl.DateTimeFormat("id-ID", {
@@ -30,15 +34,18 @@ const createCommentElement = ({ avatar, username, message, createdAt }) => {
             />
             <strong>${username} | ${createdAt}</strong>
         </div>
-        "${messages}"
+        ${messages}
     </div>
 `;
 };
 
-const displayContent = wrapper(async () => {
-  const postId = document.URL.split("#")[1];
+const displayDetailPage = wrapper(async ({ post }) => {
+  createDetailPage();
+  const postTitle = $("#post-title");
+  const postDetail = $("#post-detail");
+  const postBody = $("#post-body");
+  const postComment = $("#post-comments");
 
-  const post = await getPost(postId);
   const author = await getUser(post.authorId);
   const postcontent = post.body.split("\n").map((p) => {
     return `<p class="text-justify">${p}</>`;
@@ -48,10 +55,9 @@ const displayContent = wrapper(async () => {
   postDetail.html(`By ${author.username} : ${newFormatDate(post.createdAt)}`);
   postBody.html(postcontent);
 
-  const comments = await getCommentByPostId(postId);
+  const comments = await getCommentByPostId(post.id);
 
   comments.map(async (comment) => {
-    console.log(comment.id);
     const userComment = await getUser(comment.userId);
     const commentEl = createCommentElement({
       avatar: userComment.avatar,
@@ -64,13 +70,15 @@ const displayContent = wrapper(async () => {
   $("#modal-loading").hide();
 });
 
-$("#form-comment").submit(async (e) => {
+$("#root").on("submit", "#form-comment", async (e) => {
+  e.preventDefault();
   const message = $("#message").val();
-  const postId = document.URL.split("#")[1];
-  const userId = JSON.parse(localStorage.getItem("currentUser")).id;
+  const postId = new URLSearchParams(window.location.search).get("postId");
+  const user = await getCurrentUser();
 
-  await createComment({ message, postId, userId });
-  window.location.reload();
+  postId;
+  await createComment({ message, postId, userId: user.id });
+  // window.location.reload();
 });
 
-displayContent();
+export default displayDetailPage;

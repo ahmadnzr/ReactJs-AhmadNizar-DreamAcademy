@@ -126,8 +126,12 @@ const createComment = wrapper(async ({ message, postId, userId }) => {
   });
 });
 
-const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("currentUser")) || null;
+const getCurrentUser = async () => {
+  const userId = $("#user-list").val();
+  const user = await getUser(userId);
+  console.log(user);
+
+  return JSON.parse(localStorage.getItem("currentUser")) || user;
 };
 
 export {

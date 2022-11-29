@@ -1,8 +1,9 @@
-import { getUser, getUsers } from "./functions.js";
+import { getUser, getUsers, getCurrentUser } from "./functions.js";
+import displayHomePage from "./main.js";
 
 const userList = `
     <div class="w-full md:container mx-auto h-full flex items-center justify-between">
-        <h1 class="font-bold text-xl hover:underline"><a href="/06-javascript-async/">Home</a></h1>
+        <h1 class="cursor-pointer font-bold text-xl hover:underline" id="nav-title">Home</h1>
         <select
           class="w-40 cursor-pointer outline-none px-2 py-1"
           name="users-list"
@@ -28,10 +29,18 @@ const getUserList = async () => {
   });
 };
 
-getUserList();
+await getUserList();
+
+const user = await getCurrentUser();
+console.log(user);
 
 $("#user-list").change(async (e) => {
   const user = await getUser(e.target.value);
   localStorage.setItem("currentUser", JSON.stringify(user));
   window.location.reload();
+});
+
+$("#nav-title").click(async (e) => {
+  await displayHomePage({ currentUser: user });
+  history.pushState({ page: "home" }, "", "/");
 });

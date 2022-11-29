@@ -1,3 +1,5 @@
+import createHomePage from "./content/home.js";
+import displayDetailPage from "./detail.js";
 import {
   wrapper,
   getUsers,
@@ -7,12 +9,15 @@ import {
   updatePost,
   deletePost,
   getPost,
+  getCurrentUser,
 } from "./functions.js";
 
-const displayContent = async () => {
-  $("#modal-loading").show();
+const displayHomePage = async ({ currentUser }) => {
+  createHomePage();
+  // $("#modal-loading").show();
 
   const data = await Promise.all([getUsers(), getPosts()]);
+  // const currentUser = await getCurrentUser();
 
   $("#post-table").DataTable({
     searching: false,
@@ -32,7 +37,7 @@ const displayContent = async () => {
       {
         data: "title",
         mRender: (dt, type, row, meta) => {
-          return `<a href="blog.html#${row.id}" class='detail text-green-700 hover:underline'>${row.title}</a>`;
+          return `<span class='cursor-pointer detail text-green-700 hover:underline' id='detail-${row.id}'>${row.title}</span>`;
         },
         width: "25%",
       },
@@ -67,7 +72,7 @@ const displayContent = async () => {
       {
         data: "action",
         mRender: (dt, type, row) => {
-          if ($("#user-list").val() == row.authorId) {
+          if (currentUser.id == row.authorId) {
             return `<button class="edit bg-yellow-100 hover:bg-yellow-200 px-2 py-1 text-xs rounded-sm" id="edit-${row.id}">[Edit]</button>
             <button class="delete bg-red-100 px-2 hover:bg-red-200 py-1 text-xs rounded-sm" id="delete-${row.id}">[Hapus]</button>`;
           }
@@ -79,11 +84,13 @@ const displayContent = async () => {
     ],
   });
 
-  $("#modal-loading").hide();
+  // $("#modal-loading").hide();
 };
 
-displayContent();
+const ue = await getCurrentUser();
+console.log("ee", ue);
 
+displayHomePage({ currentUser: ue });
 $("#modal-form").submit(
   wrapper(async (e) => {
     // e.preventDefault();
@@ -104,6 +111,18 @@ $("#modal-form").submit(
     await createPost({ title, body, published });
   })
 );
+$("#add-post").click(function () {
+  $("#modal").show();
+  $("#modal").removeClass("edit");
+  $("#modal-title").html("Add New Post");
+  $("#title").val("").focus();
+  $("#body").val("");
+  $("#publish").prop("checked", false);
+});
+
+$("#close-modal").click(function () {
+  $("#modal").hide();
+});
 
 $("#post-table").on("click", ".delete", async (e) => {
   const id = e.target.id.split("-")[1];
@@ -124,4 +143,28 @@ $("#post-table").on("click", ".edit", async (e) => {
   $("#title").val(post.title);
   $("#body").val(post.body);
   $("#publish").prop("checked", post.published);
+});
+export default displayHomePage;
+
+$("#post-table").on("click", ".detail", async (e) => {
+  const id = e.target.id.split("-")[1];
+  const post = await getPost(id);
+  const data = {
+    page: "detail",
+    post,
+  };
+  displayDetailPage(data);
+  history.pushState(data, "", "/detail?postId=" + id);
+});
+
+$(window).on("popstate", async (e) => {
+  const state = e.originalEvent.state;
+  console.log(state);
+  if (state.page == "home") {
+    console.log("to home");
+    await displayHomePage({ currentUser: ue });
+  } else {
+    console.log("to detail");
+    await displayDetailPage({ post: state.post });
+  }
 });
