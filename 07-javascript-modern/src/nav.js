@@ -31,9 +31,6 @@ const getUserList = async () => {
 
 await getUserList();
 
-const user = await getCurrentUser();
-console.log(user);
-
 $("#user-list").change(async (e) => {
   const user = await getUser(e.target.value);
   localStorage.setItem("currentUser", JSON.stringify(user));
@@ -41,6 +38,6 @@ $("#user-list").change(async (e) => {
 });
 
 $("#nav-title").click(async (e) => {
-  await displayHomePage({ currentUser: user });
+  await displayHomePage();
   history.pushState({ page: "home" }, "", "/");
 });

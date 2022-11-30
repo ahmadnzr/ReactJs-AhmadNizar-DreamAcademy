@@ -127,9 +127,7 @@ const createComment = wrapper(async ({ message, postId, userId }) => {
 });
 
 const getCurrentUser = async () => {
-  const userId = $("#user-list").val();
-  const user = await getUser(userId);
-  console.log(user);
+  const user = await getUser(1);
 
   return JSON.parse(localStorage.getItem("currentUser")) || user;
 };

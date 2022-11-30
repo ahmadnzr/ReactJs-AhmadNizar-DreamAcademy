@@ -5,7 +5,7 @@ const createHomePage = () => {
     class="bg-gray-100 px-4 py-2 rounded-sm hover:opacity-70"
     id="add-post"
     >
-    Add New POST
+    Add New
     </button>
 </div>
 <table class="display" id="post-table">

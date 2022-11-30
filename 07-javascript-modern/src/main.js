@@ -1,23 +1,12 @@
 import createHomePage from "./content/home.js";
-import displayDetailPage from "./detail.js";
-import {
-  wrapper,
-  getUsers,
-  getPosts,
-  formatDate,
-  createPost,
-  updatePost,
-  deletePost,
-  getPost,
-  getCurrentUser,
-} from "./functions.js";
+import { getUsers, getPosts, formatDate, getCurrentUser } from "./functions.js";
 
-const displayHomePage = async ({ currentUser }) => {
+const displayHomePage = async () => {
+  $("#modal-loading").show();
   createHomePage();
-  // $("#modal-loading").show();
 
   const data = await Promise.all([getUsers(), getPosts()]);
-  // const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser();
 
   $("#post-table").DataTable({
     searching: false,
@@ -84,87 +73,9 @@ const displayHomePage = async ({ currentUser }) => {
     ],
   });
 
-  // $("#modal-loading").hide();
+  $("#modal-loading").hide();
 };
 
-const ue = await getCurrentUser();
-console.log("ee", ue);
+displayHomePage();
 
-displayHomePage({ currentUser: ue });
-$("#modal-form").submit(
-  wrapper(async (e) => {
-    // e.preventDefault();
-    $("#modal").hide();
-    $("#modal-loading").show();
-
-    const title = $("#title").val();
-    const body = $("#body").val();
-    const published = $("#publish").prop("checked");
-
-    const isForEdit = $("#modal").prop("class").split(" ").includes("edit");
-
-    if (isForEdit) {
-      await updatePost({ title, body, published, postId: $("#postId").html() });
-      return;
-    }
-
-    await createPost({ title, body, published });
-  })
-);
-$("#add-post").click(function () {
-  $("#modal").show();
-  $("#modal").removeClass("edit");
-  $("#modal-title").html("Add New Post");
-  $("#title").val("").focus();
-  $("#body").val("");
-  $("#publish").prop("checked", false);
-});
-
-$("#close-modal").click(function () {
-  $("#modal").hide();
-});
-
-$("#post-table").on("click", ".delete", async (e) => {
-  const id = e.target.id.split("-")[1];
-  if (confirm("Are you sure to delete post with id = " + id + "?")) {
-    await deletePost(id);
-    window.location.reload();
-  }
-  return;
-});
-
-$("#post-table").on("click", ".edit", async (e) => {
-  const id = e.target.id.split("-")[1];
-  const post = await getPost(id);
-
-  $("#modal").show();
-  $("#modal").addClass("edit");
-  $("#modal-title").html(`Edit post with id <span id="postId">${id}</span>`);
-  $("#title").val(post.title);
-  $("#body").val(post.body);
-  $("#publish").prop("checked", post.published);
-});
 export default displayHomePage;
-
-$("#post-table").on("click", ".detail", async (e) => {
-  const id = e.target.id.split("-")[1];
-  const post = await getPost(id);
-  const data = {
-    page: "detail",
-    post,
-  };
-  displayDetailPage(data);
-  history.pushState(data, "", "/detail?postId=" + id);
-});
-
-$(window).on("popstate", async (e) => {
-  const state = e.originalEvent.state;
-  console.log(state);
-  if (state.page == "home") {
-    console.log("to home");
-    await displayHomePage({ currentUser: ue });
-  } else {
-    console.log("to detail");
-    await displayDetailPage({ post: state.post });
-  }
-});
