@@ -39,7 +39,7 @@ const createCommentElement = ({ avatar, username, message, createdAt }) => {
 `;
 };
 
-const displayDetailPage = wrapper(async ({ post }) => {
+const displayDetailPage = async ({ post }) => {
   createDetailPage();
   const postTitle = $("#post-title");
   const postDetail = $("#post-detail");
@@ -68,7 +68,7 @@ const displayDetailPage = wrapper(async ({ post }) => {
     postComment.append(commentEl);
   });
   $("#modal-loading").hide();
-});
+};
 
 $("#root").on("submit", "#form-comment", async (e) => {
   e.preventDefault();

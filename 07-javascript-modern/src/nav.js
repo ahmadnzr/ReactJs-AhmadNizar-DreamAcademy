@@ -1,4 +1,5 @@
-import { getUser, getUsers, getCurrentUser } from "./functions.js";
+import displayDetailPage from "./detail.js";
+import { getUser, getUsers, getCurrentUser, getPost } from "./functions.js";
 import displayHomePage from "./main.js";
 
 const userList = `
@@ -34,7 +35,14 @@ await getUserList();
 $("#user-list").change(async (e) => {
   const user = await getUser(e.target.value);
   localStorage.setItem("currentUser", JSON.stringify(user));
-  window.location.reload();
+  const postId = new URL(document.location).searchParams.get("postId");
+  if (postId) {
+    const post = await getPost(postId);
+    await displayDetailPage({ post });
+    return;
+  }
+
+  await displayHomePage();
 });
 
 $("#nav-title").click(async (e) => {
