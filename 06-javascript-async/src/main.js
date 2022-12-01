@@ -32,7 +32,7 @@ const displayContent = wrapper(async () => {
       {
         data: "title",
         mRender: (dt, type, row, meta) => {
-          return `<a href="blog.html#${row.id}" class='detail text-green-700 hover:underline'>${row.title}</a>`;
+          return `<a href="blog.html?postId=${row.id}" class='detail text-green-700 hover:underline'>${row.title}</a>`;
         },
         width: "25%",
       },

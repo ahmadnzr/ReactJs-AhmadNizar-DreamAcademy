@@ -1,4 +1,11 @@
-import {wrapper,getCommentByPostId,formatDate, getPost, getUser,createComment} from './functions.js'
+import {
+  wrapper,
+  getCommentByPostId,
+  formatDate,
+  getPost,
+  getUser,
+  createComment,
+} from "./functions.js";
 
 const postTitle = $("#post-title");
 const postDetail = $("#post-detail");
@@ -35,9 +42,8 @@ const createCommentElement = ({ avatar, username, message, createdAt }) => {
 `;
 };
 
+const postId = new URL(document.location).searchParams.get("postId");
 const displayContent = wrapper(async () => {
-  const postId = document.URL.split("#")[1];
-
   const post = await getPost(postId);
   const author = await getUser(post.authorId);
   const postcontent = post.body.split("\n").map((p) => {
@@ -66,7 +72,6 @@ const displayContent = wrapper(async () => {
 
 $("#form-comment").submit(async (e) => {
   const message = $("#message").val();
-  const postId = document.URL.split("#")[1];
   const userId = JSON.parse(localStorage.getItem("currentUser")).id;
 
   await createComment({ message, postId, userId });

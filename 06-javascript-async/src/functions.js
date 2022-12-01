@@ -198,5 +198,5 @@ export {
   createComment,
   createPost,
   deletePost,
-  updatePost
+  updatePost,
 };

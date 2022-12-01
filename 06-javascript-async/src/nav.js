@@ -2,7 +2,10 @@ import { getUser, getUsers } from "./functions.js";
 
 const userList = `
     <div class="w-full md:container mx-auto h-full flex items-center justify-between">
-        <h1 class="font-bold text-xl hover:underline"><a href="/06-javascript-async/">Home</a></h1>
+        <div class="flex gap-2">
+          <h1 class="hover:underline"><a href="/">Home</a></h1>
+          <h1 class="hover:underline"><a href="/user.html">User</a></h1>
+        </div>
         <select
           class="w-40 cursor-pointer outline-none px-2 py-1"
           name="users-list"
