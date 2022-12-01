@@ -17,7 +17,7 @@ $("#close-modal").click(function () {
 });
 
 $("#modal-form").submit(async (e) => {
-  //   e.preventDefault();
+  e.preventDefault();
   $("#modal").hide();
   $("#modal-loading").show();
 
@@ -29,18 +29,22 @@ $("#modal-form").submit(async (e) => {
 
   if (isForEdit) {
     await updatePost({ title, body, published, postId: $("#postId").html() });
+    await displayHomePage();
+
     return;
   }
 
   await createPost({ title, body, published });
+  await displayHomePage();
 });
 
 $("#root").on("click", ".delete", async (e) => {
   const id = e.target.id.split("-")[1];
   if (confirm("Are you sure to delete post with id = " + id + "?")) {
     await deletePost(id);
-    window.location.reload();
   }
+  await displayHomePage();
+
   return;
 });
 

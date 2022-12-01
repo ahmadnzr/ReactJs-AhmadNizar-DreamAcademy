@@ -13,7 +13,7 @@ const userList = `
 `;
 
 const navbar = $(
-  '<nav class="h-14 bg-gray-100 sticky top-0 left-0 right-0"></nav>'
+  '<nav class="h-14 bg-gray-100 sticky top-0 left-0 right-0 z-50"></nav>'
 );
 navbar.append(userList);
 

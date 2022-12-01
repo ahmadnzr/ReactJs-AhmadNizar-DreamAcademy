@@ -75,10 +75,11 @@ $("#root").on("submit", "#form-comment", async (e) => {
   const message = $("#message").val();
   const postId = new URLSearchParams(window.location.search).get("postId");
   const user = await getCurrentUser();
+  const post = await getPost(postId);
 
   postId;
   await createComment({ message, postId, userId: user.id });
-  // window.location.reload();
+  await displayDetailPage({ post });
 });
 
 export default displayDetailPage;
