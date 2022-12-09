@@ -20,7 +20,8 @@ const displayHomePage = async () => {
       {
         data: "id",
         mRender: (dt, type, row, meta) => {
-          return `<td>${meta.row + 1}</td>`;
+          // return `<td>${meta.row + 1}</td>`;
+          return `<td>${row.id}}</td>`;
         },
       },
       {
