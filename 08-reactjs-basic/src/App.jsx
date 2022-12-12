@@ -1,10 +1,13 @@
-import React from 'react'
-import Container from '@material-ui/core/Container'
+import React from "react";
+import { Container } from "@material-ui/core";
+import Header from "./components/Header";
 
 const App = () => {
   return (
-    <Container>App</Container>
-  )
-}
+    <Container maxWidth="md">
+      <Header />
+    </Container>
+  );
+};
 
-export default App
+export default App;
