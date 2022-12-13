@@ -30,22 +30,6 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const rows = [
-  {
-    title: "Menjadikan dia milikku",
-    createdAt: "10/12/2022",
-    status: false,
-    id: 1,
-  },
-  {
-    title: "Belajar dengan deep work",
-    createdAt: "11/12/2022",
-    status: false,
-    id: 2,
-  },
-  { title: "Tugas pertemuan 9", createdAt: "12/12/2022", status: true, id: 3 },
-];
-
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
@@ -55,8 +39,16 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoList = () => {
+const TodoList = ({ todos }) => {
   const classes = useStyles();
+
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat("id-ID", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }).format(date.createdAt);
+  };
 
   return (
     <TableContainer component={Paper} className={classes.tableContainer}>
@@ -71,26 +63,36 @@ const TodoList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, i) => (
-            <StyledTableRow key={row.title}>
-              <StyledTableCell align="center">{i + 1}</StyledTableCell>
-              <StyledTableCell component="th" scope="row">
-                {row.title}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.createdAt}</StyledTableCell>
-              <StyledTableCell align="center">
-                {row.status ? "Done" : "In Progress"}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <Button size="small" color="primary">
-                  Edit
-                </Button>
-                <Button size="small" color="secondary">
-                  Delete
-                </Button>
+          {todos.length ? (
+            todos.map((row, i) => (
+              <StyledTableRow key={row.title}>
+                <StyledTableCell align="center">{i + 1}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  {row.title}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {formatDate(row.createdAt)}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.isDone ? "Done" : "In Progress"}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <Button size="small" color="primary">
+                    Edit
+                  </Button>
+                  <Button size="small" color="secondary">
+                    Delete
+                  </Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))
+          ) : (
+            <StyledTableRow>
+              <StyledTableCell align="center" colSpan={5}>
+                Tidak ada Task
               </StyledTableCell>
             </StyledTableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>
