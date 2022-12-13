@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@material-ui/core";
 
 import Header from "./components/Header";
@@ -13,6 +13,10 @@ const App = () => {
     setTodos((todo) => [...todo, newTodo]);
   };
 
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
+
   return (
     <Container maxWidth="md">
       <Header />
@@ -26,10 +30,10 @@ const App = () => {
           <FormInput todos={todos} addTodo={addTodo} />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Summary />
+          <Summary todos={todos} />
         </Grid>
       </Grid>
-      <TodoList />
+      <TodoList todos={todos} />
     </Container>
   );
 };

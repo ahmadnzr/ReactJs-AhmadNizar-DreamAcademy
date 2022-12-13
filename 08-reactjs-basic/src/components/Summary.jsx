@@ -1,15 +1,13 @@
 import React from "react";
 import { Grid, Paper, Typography } from "@material-ui/core";
 
-const Summary = () => {
+const Summary = ({ todos }) => {
+  const sum = todos.length;
+  const onProgress = todos.filter((todo) => todo.isDone === false).length;
+  const done = todos.filter((todo) => todo.isDone === true).length;
+
   return (
-    <Grid
-      container
-      //   style={{ height: "100%", backgroundColor: "red" }}
-      spacing={1}
-      alignContent="center"
-      //   wrap="wrap"
-    >
+    <Grid container spacing={1} alignContent="center" wrap="wrap">
       <Grid item xs={12}>
         <Grid
           component={Paper}
@@ -23,7 +21,7 @@ const Summary = () => {
             component="h1"
             style={{ fontWeight: "bold" }}
           >
-            10
+            {sum}
           </Typography>
           <Typography variant="subtitle1" component="span">
             Total Task
@@ -43,7 +41,7 @@ const Summary = () => {
             component="h3"
             style={{ fontWeight: "bold" }}
           >
-            4
+            {onProgress}
           </Typography>
           <Typography variant="subtitle1" component="span">
             In Progress
@@ -63,7 +61,7 @@ const Summary = () => {
             component="h3"
             style={{ fontWeight: "bold" }}
           >
-            6
+            {done}
           </Typography>
           <Typography variant="subtitle1" component="span">
             Done

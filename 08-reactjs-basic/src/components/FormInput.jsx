@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
 
@@ -19,23 +19,21 @@ const useStyles = makeStyles((theme) => ({
 const FormInput = ({ todos, addTodo }) => {
   const [todo, setTodo] = useState({});
   const [error, setError] = useState(false);
+
   const classes = useStyles();
 
   const handleChange = (e) => {
     const id = todos[todos.length - 1]?.id + 1 || 1;
-    const title = e.target.name === "title" ? e.target.value : todo.title || "";
-    const status =
-      e.target.name === "status" ? e.target.checked : todo.status || false;
+    const title = e.target.name === "title" ? e.target.value : todo.title;
+    const isDone =
+      e.target.name === "status" ? e.target.checked : todo.isDone || false;
 
     const newTodo = {
       id,
       title,
-      status,
+      isDone,
       createdAt: new Date().getTime(),
     };
-
-    let copys = { ...todo };
-    delete copys[e.target.id];
 
     setTodo((prev) => {
       return { ...prev, ...newTodo };
@@ -44,17 +42,13 @@ const FormInput = ({ todos, addTodo }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (typeof todo.title === "undefined") {
+    if (todo.title === "" || typeof todo.title === "undefined") {
       setError(true);
       return;
     }
     addTodo(todo);
-    setTodo({ title: "", status: false });
+    setTodo({ title: "", isDone: false });
   };
-
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
 
   return (
     <Grid container component={Paper} style={{ height: "100%", padding: 10 }}>
@@ -79,9 +73,10 @@ const FormInput = ({ todos, addTodo }) => {
             name="title"
             value={todo?.title || ""}
             onChange={handleChange}
+            autoFocus
           />
           <AntSwitch
-            selected={todo?.status}
+            selected={todo?.isDone}
             handleChange={handleChange}
             leftLabel="In Progress"
             rightLabel="Done"
