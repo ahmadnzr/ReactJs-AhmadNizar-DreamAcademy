@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Grid } from "@material-ui/core";
 
 import Header from "./components/Header";
@@ -7,6 +7,12 @@ import Summary from "./components/Summary";
 import TodoList from "./components/TodoList";
 
 const App = () => {
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = (newTodo) => {
+    setTodos((todo) => [...todo, newTodo]);
+  };
+
   return (
     <Container maxWidth="md">
       <Header />
@@ -17,7 +23,7 @@ const App = () => {
         wrap="wrap-reverse"
       >
         <Grid item xs={12} sm={6}>
-          <FormInput />
+          <FormInput todos={todos} addTodo={addTodo} />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Summary />

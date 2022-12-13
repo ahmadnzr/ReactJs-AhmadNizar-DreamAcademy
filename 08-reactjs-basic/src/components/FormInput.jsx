@@ -1,13 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Box,
-  TextField,
-  Typography,
-  Button,
-  Grid,
-  Paper,
-} from "@material-ui/core";
+import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
 
 import AntSwitch from "./AntSwitch";
 
@@ -23,13 +16,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormInput = () => {
-  const [done, setDone] = useState(false);
+const FormInput = ({ todos, addTodo }) => {
+  const [todo, setTodo] = useState({});
+  const [error, setError] = useState(false);
   const classes = useStyles();
 
-  const handleChange = () => {
-    setDone(!done);
+  const handleChange = (e) => {
+    const id = todos[todos.length - 1]?.id + 1 || 1;
+    const title = e.target.name === "title" ? e.target.value : todo.title || "";
+    const status =
+      e.target.name === "status" ? e.target.checked : todo.status || false;
+
+    const newTodo = {
+      id,
+      title,
+      status,
+      createdAt: new Date().getTime(),
+    };
+
+    let copys = { ...todo };
+    delete copys[e.target.id];
+
+    setTodo((prev) => {
+      return { ...prev, ...newTodo };
+    });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (typeof todo.title === "undefined") {
+      setError(true);
+      return;
+    }
+    addTodo(todo);
+    setTodo({ title: "", status: false });
+  };
+
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
+
   return (
     <Grid container component={Paper} style={{ height: "100%", padding: 10 }}>
       <Grid item xs={12}>
@@ -38,20 +64,31 @@ const FormInput = () => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <form action="" className={classes.form} noValidate autoComplete="off">
+        <form
+          onSubmit={handleSubmit}
+          action=""
+          className={classes.form}
+          noValidate
+          autoComplete="off"
+        >
           <TextField
-            // error
+            error={error}
             id="outlined-error"
             label="Title"
             variant="outlined"
+            name="title"
+            value={todo?.title || ""}
+            onChange={handleChange}
           />
           <AntSwitch
-            selected={done}
+            selected={todo?.status}
             handleChange={handleChange}
             leftLabel="In Progress"
             rightLabel="Done"
           />
-          <Button variant="contained">Create</Button>
+          <Button type="submit" variant="contained">
+            Create
+          </Button>
         </form>
       </Grid>
     </Grid>

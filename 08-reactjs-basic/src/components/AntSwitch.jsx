@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Switch, Grid } from "@material-ui/core";
 
@@ -41,7 +41,11 @@ const AntSwitch = ({ selected, handleChange, leftLabel, rightLabel }) => {
     <Grid component="label" container alignItems="center" spacing={1}>
       <Grid item>{leftLabel}</Grid>
       <Grid item>
-        <CustomSwitch onChange={handleChange} checked={selected} />
+        <CustomSwitch
+          onChange={handleChange}
+          checked={selected || false}
+          name="status"
+        />
       </Grid>
       <Grid item>{rightLabel}</Grid>
     </Grid>
