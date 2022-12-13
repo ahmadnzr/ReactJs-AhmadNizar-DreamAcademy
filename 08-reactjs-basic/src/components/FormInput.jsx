@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
 
@@ -16,20 +16,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormInput = ({ todos, addTodo }) => {
-  const [todo, setTodo] = useState({});
+const FormInput = ({
+  addTodo,
+  editTodo,
+  todo,
+  setTodo,
+  isForEdit,
+  setIsForEdit,
+}) => {
   const [error, setError] = useState(false);
 
   const classes = useStyles();
 
+  const resetValue = () => {
+    setTodo({ title: "", isDone: false });
+    setTodo({});
+    setIsForEdit(false);
+  };
+
   const handleChange = (e) => {
-    const id = todos[todos.length - 1]?.id + 1 || 1;
     const title = e.target.name === "title" ? e.target.value : todo.title;
     const isDone =
       e.target.name === "status" ? e.target.checked : todo.isDone || false;
 
     const newTodo = {
-      id,
       title,
       isDone,
       createdAt: new Date().getTime(),
@@ -46,15 +56,20 @@ const FormInput = ({ todos, addTodo }) => {
       setError(true);
       return;
     }
-    addTodo(todo);
-    setTodo({ title: "", isDone: false });
+    if (isForEdit) {
+      editTodo(todo.id);
+    } else {
+      addTodo(todo);
+    }
+
+    resetValue();
   };
 
   return (
     <Grid container component={Paper} style={{ height: "100%", padding: 10 }}>
       <Grid item xs={12}>
         <Typography variant="h5" component={"h2"} className={classes.title}>
-          Input your task!
+          {isForEdit ? "Edit" : "Input your task!"}
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -67,6 +82,7 @@ const FormInput = ({ todos, addTodo }) => {
         >
           <TextField
             error={error}
+            required
             id="outlined-error"
             label="Title"
             variant="outlined"
@@ -76,14 +92,19 @@ const FormInput = ({ todos, addTodo }) => {
             autoFocus
           />
           <AntSwitch
-            selected={todo?.isDone}
+            selected={todo?.isDone || false}
             handleChange={handleChange}
             leftLabel="In Progress"
             rightLabel="Done"
           />
           <Button type="submit" variant="contained">
-            Create
+            Save
           </Button>
+          {isForEdit ? (
+            <Button onClick={resetValue} variant="contained">
+              Cancel Edit
+            </Button>
+          ) : null}
         </form>
       </Grid>
     </Grid>

@@ -43,7 +43,7 @@ const AntSwitch = ({ selected, handleChange, leftLabel, rightLabel }) => {
       <Grid item>
         <CustomSwitch
           onChange={handleChange}
-          checked={selected || false}
+          checked={selected}
           name="status"
         />
       </Grid>

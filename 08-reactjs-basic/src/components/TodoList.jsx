@@ -39,7 +39,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, deleteTodo, findTodo }) => {
   const classes = useStyles();
 
   const formatDate = (date) => {
@@ -48,6 +48,14 @@ const TodoList = ({ todos }) => {
       month: "numeric",
       day: "numeric",
     }).format(date.createdAt);
+  };
+
+  const handleDelete = (todoId) => {
+    if (window.confirm("Yakin mau dihapus ?")) {
+      deleteTodo(todoId);
+      return;
+    }
+    return;
   };
 
   return (
@@ -65,7 +73,7 @@ const TodoList = ({ todos }) => {
         <TableBody>
           {todos.length ? (
             todos.map((row, i) => (
-              <StyledTableRow key={row.title}>
+              <StyledTableRow key={row.id}>
                 <StyledTableCell align="center">{i + 1}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.title}
@@ -77,10 +85,18 @@ const TodoList = ({ todos }) => {
                   {row.isDone ? "Done" : "In Progress"}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <Button size="small" color="primary">
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => findTodo(row.id)}
+                  >
                     Edit
                   </Button>
-                  <Button size="small" color="secondary">
+                  <Button
+                    size="small"
+                    color="secondary"
+                    onClick={() => handleDelete(row.id)}
+                  >
                     Delete
                   </Button>
                 </StyledTableCell>
