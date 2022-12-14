@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Container, Grid } from "@material-ui/core";
+import React, { useState } from "react";
+import { Container, createTheme, Grid, ThemeProvider } from "@material-ui/core";
 
 import Header from "./components/Header";
 import FormInput from "./components/FormInput";
@@ -10,6 +10,7 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState({});
   const [isForEdit, setIsForEdit] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   const id = todos[todos.length - 1]?.id + 1 || 1;
 
@@ -35,36 +36,44 @@ const App = () => {
     setIsForEdit(true);
   };
 
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          type: isDark ? "dark" : "light",
+        },
+      }),
+    [isDark]
+  );
 
   return (
-    <Container maxWidth="md">
-      <Header />
-      <Grid
-        container
-        justifyContent="space-between"
-        spacing={4}
-        wrap="wrap-reverse"
-      >
-        <Grid item xs={12} sm={6}>
-          <FormInput
-            todos={todos}
-            addTodo={addTodo}
-            editTodo={editTodo}
-            todo={todo}
-            setTodo={setTodo}
-            isForEdit={isForEdit}
-            setIsForEdit={setIsForEdit}
-          />
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="md">
+        <Header setIsDark={setIsDark} />
+        <Grid
+          container
+          justifyContent="space-between"
+          spacing={4}
+          wrap="wrap-reverse"
+        >
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              todos={todos}
+              addTodo={addTodo}
+              editTodo={editTodo}
+              todo={todo}
+              setTodo={setTodo}
+              isForEdit={isForEdit}
+              setIsForEdit={setIsForEdit}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Summary todos={todos} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Summary todos={todos} />
-        </Grid>
-      </Grid>
-      <TodoList todos={todos} deleteTodo={deleteTodo} findTodo={findTodo} />
-    </Container>
+        <TodoList todos={todos} deleteTodo={deleteTodo} findTodo={findTodo} />
+      </Container>
+    </ThemeProvider>
   );
 };
 
