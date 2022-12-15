@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
 
 import AntSwitch from "./AntSwitch";
+import { actionType } from "../reducers/actionType";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -20,7 +21,7 @@ const FormInput = ({
   addTodo,
   editTodo,
   todo,
-  setTodo,
+  dispatch,
   isForEdit,
   setIsForEdit,
 }) => {
@@ -29,24 +30,17 @@ const FormInput = ({
   const classes = useStyles();
 
   const resetValue = () => {
-    setTodo({ title: "", isDone: false });
-    setTodo({});
+    dispatch({ type: actionType.RESET_VALUE });
     setIsForEdit(false);
   };
 
-  const handleChange = (e) => {
-    const title = e.target.name === "title" ? e.target.value : todo.title;
-    const isDone =
-      e.target.name === "status" ? e.target.checked : todo.isDone || false;
-
-    const newTodo = {
-      title,
-      isDone,
-      createdAt: new Date().getTime(),
-    };
-
-    setTodo((prev) => {
-      return { ...prev, ...newTodo };
+  const handleChange = ({ key, value }) => {
+    dispatch({
+      type: actionType.INPUT_CHANGE,
+      payload: {
+        key,
+        value,
+      },
     });
   };
 
@@ -59,7 +53,7 @@ const FormInput = ({
     if (isForEdit) {
       editTodo(todo.id);
     } else {
-      addTodo(todo);
+      addTodo();
     }
 
     resetValue();
@@ -87,13 +81,17 @@ const FormInput = ({
             label="Title"
             variant="outlined"
             name="title"
-            value={todo?.title || ""}
-            onChange={handleChange}
+            value={todo.title}
+            onChange={(e) =>
+              handleChange({ key: "title", value: e.target.value })
+            }
             autoFocus
           />
           <AntSwitch
-            selected={todo?.isDone || false}
-            handleChange={handleChange}
+            selected={todo?.isDone}
+            handleChange={(e) =>
+              handleChange({ key: "isDone", value: e.target.checked })
+            }
             leftLabel="In Progress"
             rightLabel="Done"
           />
