@@ -12,6 +12,8 @@ import {
   withStyles,
 } from "@material-ui/core";
 
+import { actionType } from "../reducers/actionType";
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -39,7 +41,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoList = ({ todos, deleteTodo, findTodo }) => {
+const TodoList = ({ findTodo, todos, dispatch }) => {
   const classes = useStyles();
 
   const formatDate = (date) => {
@@ -52,7 +54,7 @@ const TodoList = ({ todos, deleteTodo, findTodo }) => {
 
   const handleDelete = (todoId) => {
     if (window.confirm("Yakin mau dihapus ?")) {
-      deleteTodo(todoId);
+      dispatch({ type: actionType.DELETE_TODO, payload: { todoId } });
       return;
     }
     return;
