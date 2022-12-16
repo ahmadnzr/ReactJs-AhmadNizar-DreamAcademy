@@ -21,7 +21,7 @@ export const initialTodoList = [
   },
 ];
 
-export function todoReducer(state, action) {
+export function todos(state = initialTodoList, action) {
   switch (action.type) {
     case actionType.ADD_TODO: {
       return [
@@ -38,14 +38,15 @@ export function todoReducer(state, action) {
     }
     case actionType.EDIT_TODO: {
       const indexToEdit = state.findIndex(
-        (todo) => todo.id === action.payload.editId
+        (todo) => todo.id === action.payload.todo.id
       );
       const copyTodo = state;
       copyTodo[indexToEdit] = action.payload.todo;
-      return copyTodo;
+
+      return [...copyTodo];
     }
     default: {
-      throw new Error("Unknown action type ", action.type);
+      return state;
     }
   }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Grid, Paper, Typography } from "@material-ui/core";
 
 const Summary = ({ todos }) => {
@@ -72,4 +73,8 @@ const Summary = ({ todos }) => {
   );
 };
 
-export default Summary;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps)(Summary);

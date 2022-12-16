@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import {
   Button,
   makeStyles,
@@ -41,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoList = ({ findTodo, todos, dispatch }) => {
+const TodoList = ({ todos, dispatchOnChange, dispatch }) => {
   const classes = useStyles();
 
   const formatDate = (date) => {
@@ -58,6 +59,11 @@ const TodoList = ({ findTodo, todos, dispatch }) => {
       return;
     }
     return;
+  };
+
+  const findTodo = (id) => {
+    const findTodo = todos.find((todo) => todo.id === id);
+    dispatchOnChange({ type: actionType.SET_TODO, payload: findTodo });
   };
 
   return (
@@ -117,4 +123,8 @@ const TodoList = ({ findTodo, todos, dispatch }) => {
   );
 };
 
-export default TodoList;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps)(TodoList);

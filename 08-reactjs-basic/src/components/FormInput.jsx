@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 import AntSwitch from "./AntSwitch";
 import { actionType } from "../reducers/actionType";
@@ -17,25 +18,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormInput = ({
-  addTodo,
-  editTodo,
-  todo,
-  dispatch,
-  isForEdit,
-  setIsForEdit,
-}) => {
+const FormInput = ({ newTodo, dispatchOnChange, dispatch }) => {
   const [error, setError] = useState(false);
+  const isForEdit = newTodo.isForEdit;
 
   const classes = useStyles();
 
+  const todo = newTodo.todo;
+
   const resetValue = () => {
-    dispatch({ type: actionType.RESET_VALUE });
-    setIsForEdit(false);
+    dispatchOnChange({ type: actionType.RESET_VALUE });
   };
 
   const handleChange = ({ key, value }) => {
-    dispatch({
+    dispatchOnChange({
       type: actionType.INPUT_CHANGE,
       payload: {
         key,
@@ -51,9 +47,10 @@ const FormInput = ({
       return;
     }
     if (isForEdit) {
-      editTodo(todo.id);
+      console.log("edit", todo);
+      dispatch({ type: actionType.EDIT_TODO, payload: { todo } });
     } else {
-      addTodo();
+      dispatch({ type: actionType.ADD_TODO, payload: todo });
     }
 
     resetValue();
@@ -109,4 +106,8 @@ const FormInput = ({
   );
 };
 
-export default FormInput;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps)(FormInput);
