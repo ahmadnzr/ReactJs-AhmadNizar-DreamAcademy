@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { Container, createTheme, Grid, ThemeProvider } from "@material-ui/core";
 
 import Header from "./components/Header";
@@ -6,11 +6,12 @@ import FormInput from "./components/FormInput";
 import Summary from "./components/Summary";
 import TodoList from "./components/TodoList";
 
-import { newTodoReducer, initialTodo } from "./reducers/todo";
+import { useForm } from "./hooks/useForm";
 
 const App = () => {
   const [isDark, setIsDark] = useState(false);
-  const [newTodo, dispatch] = useReducer(newTodoReducer, initialTodo);
+  const { todo, onChangeInput, onSubmitForm, onEditForm, resetForm } =
+    useForm();
 
   const theme = React.useMemo(
     () =>
@@ -33,13 +34,18 @@ const App = () => {
           wrap="wrap-reverse"
         >
           <Grid item xs={12} sm={6}>
-            <FormInput newTodo={newTodo} dispatchOnChange={dispatch} />
+            <FormInput
+              todo={todo}
+              onChangeInput={onChangeInput}
+              onSubmitForm={onSubmitForm}
+              resetForm={resetForm}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Summary todos={[]} />
           </Grid>
         </Grid>
-        <TodoList dispatchOnChange={dispatch} />
+        <TodoList onClickEdit={onEditForm} />
       </Container>
     </ThemeProvider>
   );

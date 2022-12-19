@@ -1,5 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   makeStyles,
@@ -13,7 +13,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 
-import { actionType } from "../reducers/actionType";
+import { deleteTodo } from "../store/todo/actionReducer";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -42,7 +42,9 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoList = ({ todos, dispatchOnChange, dispatch }) => {
+const TodoList = ({ onClickEdit }) => {
+  const { todos } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const formatDate = (date) => {
@@ -55,7 +57,7 @@ const TodoList = ({ todos, dispatchOnChange, dispatch }) => {
 
   const handleDelete = (todoId) => {
     if (window.confirm("Yakin mau dihapus ?")) {
-      dispatch({ type: actionType.DELETE_TODO, payload: { todoId } });
+      dispatch(deleteTodo(todoId));
       return;
     }
     return;
@@ -63,7 +65,7 @@ const TodoList = ({ todos, dispatchOnChange, dispatch }) => {
 
   const findTodo = (id) => {
     const findTodo = todos.find((todo) => todo.id === id);
-    dispatchOnChange({ type: actionType.SET_TODO, payload: findTodo });
+    onClickEdit(findTodo);
   };
 
   return (
@@ -123,8 +125,4 @@ const TodoList = ({ todos, dispatchOnChange, dispatch }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return state;
-};
-
-export default connect(mapStateToProps)(TodoList);
+export default TodoList;

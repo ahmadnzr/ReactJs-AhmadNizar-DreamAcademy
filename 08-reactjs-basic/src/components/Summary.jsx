@@ -1,8 +1,10 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { Grid, Paper, Typography } from "@material-ui/core";
 
-const Summary = ({ todos }) => {
+const Summary = () => {
+  const { todos } = useSelector((state) => state);
+
   const sum = todos.length;
   const onProgress = todos.filter((todo) => todo.isDone === false).length;
   const done = todos.filter((todo) => todo.isDone === true).length;
@@ -73,8 +75,4 @@ const Summary = ({ todos }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return state;
-};
-
-export default connect(mapStateToProps)(Summary);
+export default Summary;

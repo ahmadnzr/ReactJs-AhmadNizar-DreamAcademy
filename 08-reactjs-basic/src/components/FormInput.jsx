@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AntSwitch from "./AntSwitch";
-import { actionType } from "../reducers/actionType";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -18,42 +16,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormInput = ({ newTodo, dispatchOnChange, dispatch }) => {
+const FormInput = ({ todo, onChangeInput, onSubmitForm, resetForm }) => {
   const [error, setError] = useState(false);
-  const isForEdit = newTodo.isForEdit;
+  const {
+    isForEdit,
+    todo: { title, isDone },
+  } = todo;
 
   const classes = useStyles();
 
-  const todo = newTodo.todo;
-
-  const resetValue = () => {
-    dispatchOnChange({ type: actionType.RESET_VALUE });
-  };
-
   const handleChange = ({ key, value }) => {
-    dispatchOnChange({
-      type: actionType.INPUT_CHANGE,
-      payload: {
-        key,
-        value,
-      },
-    });
+    onChangeInput(key, value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (todo.title === "" || typeof todo.title === "undefined") {
+    if (title === "" || typeof title === "undefined") {
       setError(true);
       return;
     }
-    if (isForEdit) {
-      console.log("edit", todo);
-      dispatch({ type: actionType.EDIT_TODO, payload: { todo } });
-    } else {
-      dispatch({ type: actionType.ADD_TODO, payload: todo });
-    }
 
-    resetValue();
+    onSubmitForm();
   };
 
   return (
@@ -78,14 +61,14 @@ const FormInput = ({ newTodo, dispatchOnChange, dispatch }) => {
             label="Title"
             variant="outlined"
             name="title"
-            value={todo.title}
+            value={title}
             onChange={(e) =>
               handleChange({ key: "title", value: e.target.value })
             }
             autoFocus
           />
           <AntSwitch
-            selected={todo?.isDone}
+            selected={isDone}
             handleChange={(e) =>
               handleChange({ key: "isDone", value: e.target.checked })
             }
@@ -96,7 +79,7 @@ const FormInput = ({ newTodo, dispatchOnChange, dispatch }) => {
             Save
           </Button>
           {isForEdit ? (
-            <Button onClick={resetValue} variant="contained">
+            <Button onClick={() => resetForm()} variant="contained">
               Cancel Edit
             </Button>
           ) : null}
@@ -106,8 +89,4 @@ const FormInput = ({ newTodo, dispatchOnChange, dispatch }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return state;
-};
-
-export default connect(mapStateToProps)(FormInput);
+export default FormInput;

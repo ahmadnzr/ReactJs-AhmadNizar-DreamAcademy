@@ -21,13 +21,13 @@ export const initialTodoList = [
   },
 ];
 
-export function todos(state = initialTodoList, action) {
+export function todosReducer(state = initialTodoList, action) {
   switch (action.type) {
     case actionType.ADD_TODO: {
       return [
         ...state,
         {
-          ...action.payload,
+          ...action.payload.todo,
           createdAt: new Date().getTime(),
           id: state[state.length - 1]?.id + 1 || 1,
         },
