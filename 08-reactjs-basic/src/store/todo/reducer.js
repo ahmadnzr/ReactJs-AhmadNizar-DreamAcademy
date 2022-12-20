@@ -34,7 +34,8 @@ export function todosReducer(state = initialTodoList, action) {
       ];
     }
     case actionType.DELETE_TODO: {
-      return state.filter((todo) => todo.id !== action.payload.todoId);
+      const newTodo = state.filter((todo) => todo.id !== action.payload.todoId);
+      return [...newTodo];
     }
     case actionType.EDIT_TODO: {
       const indexToEdit = state.findIndex(
