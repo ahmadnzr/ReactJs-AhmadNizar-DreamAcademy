@@ -27,22 +27,22 @@ export function todosReducer(state = initialTodoList, action) {
       return [
         ...state,
         {
-          ...action.payload.todo,
+          ...action.payload,
           createdAt: new Date().getTime(),
           id: state[state.length - 1]?.id + 1 || 1,
         },
       ];
     }
     case actionType.DELETE_TODO: {
-      const newTodo = state.filter((todo) => todo.id !== action.payload.todoId);
+      const newTodo = state.filter((todo) => todo.id !== action.payload);
       return [...newTodo];
     }
     case actionType.EDIT_TODO: {
       const indexToEdit = state.findIndex(
-        (todo) => todo.id === action.payload.todo.id
+        (todo) => todo.id === action.payload.id
       );
       const copyTodo = state;
-      copyTodo[indexToEdit] = action.payload.todo;
+      copyTodo[indexToEdit] = action.payload;
 
       return [...copyTodo];
     }
