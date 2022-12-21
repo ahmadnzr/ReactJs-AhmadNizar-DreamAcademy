@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Typography, Button, Grid, Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 import AntSwitch from "./AntSwitch";
-import { actionType } from "../reducers/actionType";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -17,46 +16,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormInput = ({
-  addTodo,
-  editTodo,
-  todo,
-  dispatch,
-  isForEdit,
-  setIsForEdit,
-}) => {
+const FormInput = ({ todo, onChangeInput, onSubmitForm, resetForm }) => {
   const [error, setError] = useState(false);
+  const {
+    isForEdit,
+    todo: { title, isDone },
+  } = todo;
 
   const classes = useStyles();
 
-  const resetValue = () => {
-    dispatch({ type: actionType.RESET_VALUE });
-    setIsForEdit(false);
-  };
-
   const handleChange = ({ key, value }) => {
-    dispatch({
-      type: actionType.INPUT_CHANGE,
-      payload: {
-        key,
-        value,
-      },
-    });
+    onChangeInput(key, value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (todo.title === "" || typeof todo.title === "undefined") {
+    if (title === "" || typeof title === "undefined") {
       setError(true);
       return;
     }
-    if (isForEdit) {
-      editTodo(todo.id);
-    } else {
-      addTodo();
-    }
 
-    resetValue();
+    onSubmitForm();
   };
 
   return (
@@ -81,14 +61,14 @@ const FormInput = ({
             label="Title"
             variant="outlined"
             name="title"
-            value={todo.title}
+            value={title}
             onChange={(e) =>
               handleChange({ key: "title", value: e.target.value })
             }
             autoFocus
           />
           <AntSwitch
-            selected={todo?.isDone}
+            selected={isDone}
             handleChange={(e) =>
               handleChange({ key: "isDone", value: e.target.checked })
             }
@@ -99,7 +79,7 @@ const FormInput = ({
             Save
           </Button>
           {isForEdit ? (
-            <Button onClick={resetValue} variant="contained">
+            <Button onClick={() => resetForm()} variant="contained">
               Cancel Edit
             </Button>
           ) : null}

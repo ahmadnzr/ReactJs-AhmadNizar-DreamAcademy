@@ -1,7 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Grid, Paper, Typography } from "@material-ui/core";
 
-const Summary = ({ todos }) => {
+const Summary = () => {
+  const { todos } = useSelector((state) => state);
+
   const sum = todos.length;
   const onProgress = todos.filter((todo) => todo.isDone === false).length;
   const done = todos.filter((todo) => todo.isDone === true).length;

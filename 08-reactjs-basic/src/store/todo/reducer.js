@@ -21,7 +21,7 @@ export const initialTodoList = [
   },
 ];
 
-export function todoReducer(state, action) {
+export function todosReducer(state = initialTodoList, action) {
   switch (action.type) {
     case actionType.ADD_TODO: {
       return [
@@ -34,18 +34,20 @@ export function todoReducer(state, action) {
       ];
     }
     case actionType.DELETE_TODO: {
-      return state.filter((todo) => todo.id !== action.payload.todoId);
+      const newTodo = state.filter((todo) => todo.id !== action.payload);
+      return [...newTodo];
     }
     case actionType.EDIT_TODO: {
       const indexToEdit = state.findIndex(
-        (todo) => todo.id === action.payload.editId
+        (todo) => todo.id === action.payload.id
       );
       const copyTodo = state;
-      copyTodo[indexToEdit] = action.payload.todo;
-      return copyTodo;
+      copyTodo[indexToEdit] = action.payload;
+
+      return [...copyTodo];
     }
     default: {
-      throw new Error("Unknown action type ", action.type);
+      return state;
     }
   }
 }

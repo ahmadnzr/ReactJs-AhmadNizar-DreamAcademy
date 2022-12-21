@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   makeStyles,
@@ -12,7 +13,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 
-import { actionType } from "../reducers/actionType";
+import { deleteTodo } from "../store/todo/actionReducer";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -41,7 +42,9 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoList = ({ findTodo, todos, dispatch }) => {
+const TodoList = ({ onClickEdit }) => {
+  const { todos } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const formatDate = (date) => {
@@ -54,10 +57,15 @@ const TodoList = ({ findTodo, todos, dispatch }) => {
 
   const handleDelete = (todoId) => {
     if (window.confirm("Yakin mau dihapus ?")) {
-      dispatch({ type: actionType.DELETE_TODO, payload: { todoId } });
+      dispatch(deleteTodo(todoId));
       return;
     }
     return;
+  };
+
+  const findTodo = (id) => {
+    const findTodo = todos.find((todo) => todo.id === id);
+    onClickEdit(findTodo);
   };
 
   return (
