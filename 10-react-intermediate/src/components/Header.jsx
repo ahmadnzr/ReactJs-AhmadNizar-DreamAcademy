@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Container,
   Box,
@@ -7,21 +7,22 @@ import {
   FormControl,
   Select,
   MenuItem,
-  FormControlLabel,
 } from "@mui/material";
 
-const Header = () => {
-  const [user, setUser] = React.useState("Nizar");
+import { UserContext } from "../contexts/UserContext";
+import MuiLink from "./MuiLink";
 
-  const handleChange = (event) => {
-    setUser(event.target.value);
+const Header = () => {
+  const { users, selectedUser, handleSelectUser } = useContext(UserContext);
+
+  const handleChangeUser = (e) => {
+    handleSelectUser(e.target.value);
   };
 
   return (
     <Box sx={{ bgcolor: "#cfe8fc", height: "70px" }}>
       <Box
         component={Container}
-        container
         sx={{
           height: "100%",
           display: "flex",
@@ -40,15 +41,14 @@ const Header = () => {
             xs={10}
             sx={{ display: "flex", alignItems: "center", gap: "20px" }}
           >
-            <Typography variant="subtitle" component={"span"}>
-              Home
-            </Typography>
-            <Typography variant="subtitle" component={"span"}>
-              Posts
-            </Typography>
-            <Typography variant="subtitle" component={"span"}>
-              Users
-            </Typography>
+            <MuiLink path={"/"}>
+              <Typography variant="subtitle">Home</Typography>
+            </MuiLink>
+            <MuiLink path={"users"}>
+              <Typography variant="subtitle" component={"span"}>
+                Users
+              </Typography>
+            </MuiLink>
           </Grid>
         </Grid>
         <FormControl
@@ -58,15 +58,14 @@ const Header = () => {
         >
           <Select
             displayEmpty
-            labelId="demo-select-small"
-            id="demo-select-small"
-            value={user}
-            renderValue={() => user}
-            onChange={handleChange}
+            value={selectedUser?.id || 1}
+            onChange={handleChangeUser}
           >
-            <MenuItem value={"Thirty"}>Ten</MenuItem>
-            <MenuItem value={"Twenty"}>Twenty</MenuItem>
-            <MenuItem value={"Thirty"}>Thirty</MenuItem>
+            {users.map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.username}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
