@@ -4,20 +4,24 @@ import React, { createContext, useEffect, useState } from "react";
 export const UserContext = createContext({});
 
 const UserContextProvider = ({ children }) => {
-  const [users, setUsers] = useState([]);
+  const [data, setData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchUser = async () => {
-    const res = await axios({
-      method: "get",
-      url: "http://localhost:3000/users",
-    });
-    setUsers(res.data);
-    setSelectedUser(res.data[0]);
+    try {
+      const res = await axios({
+        method: "get",
+        url: "http://localhost:3000/users",
+      });
+      setData(res.data);
+      setSelectedUser(res.data[0]);
+    } catch (err) {
+      throw new Error(err.message);
+    }
   };
 
   const handleSelectUser = (userId) => {
-    const user = users.find((user) => user.id === userId);
+    const user = data.find((user) => user.id === userId);
 
     setSelectedUser(user);
   };
@@ -26,7 +30,7 @@ const UserContextProvider = ({ children }) => {
     fetchUser();
   }, []);
   return (
-    <UserContext.Provider value={{ users, selectedUser, handleSelectUser }}>
+    <UserContext.Provider value={{ data, selectedUser, handleSelectUser }}>
       {children}
     </UserContext.Provider>
   );

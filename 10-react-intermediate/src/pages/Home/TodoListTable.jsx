@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Paper,
   styled,
@@ -11,6 +11,8 @@ import {
   TableBody,
   Button,
 } from "@mui/material";
+
+import axios from "axios";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -54,12 +56,28 @@ const formatDate = (date) => {
     .join(" ");
 };
 
-const TodoListTable = ({ rows }) => {
-  const { users, selectedUser } = useContext(UserContext);
+const TodoListTable = () => {
+  const [todos, setTodos] = useState([]);
+  const { data, selectedUser } = useContext(UserContext);
 
   const getUser = (userId) => {
-    return users.find((user) => user.id === userId)?.username;
+    return data.find((user) => user.id === userId)?.username;
   };
+
+  const fetchTodoList = async () => {
+    try {
+      const res = await axios({
+        method: "get",
+        url: `http://localhost:${3000}/posts`,
+      });
+
+      setTodos(res.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchTodoList();
+  }, []);
 
   return (
     <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
@@ -76,7 +94,7 @@ const TodoListTable = ({ rows }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, i) => (
+          {todos.map((row, i) => (
             <StyledTableRow key={i}>
               <StyledTableCell component="th" scope="row">
                 {i + 1}
