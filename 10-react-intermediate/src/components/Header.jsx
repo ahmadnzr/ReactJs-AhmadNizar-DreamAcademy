@@ -13,7 +13,7 @@ import { UserContext } from "../contexts/UserContext";
 import MuiLink from "./MuiLink";
 
 const Header = () => {
-  const { users, selectedUser, handleSelectUser } = useContext(UserContext);
+  const { data, selectedUser, handleSelectUser } = useContext(UserContext);
 
   const handleChangeUser = (e) => {
     handleSelectUser(e.target.value);
@@ -61,7 +61,7 @@ const Header = () => {
             value={selectedUser?.id || 1}
             onChange={handleChangeUser}
           >
-            {users.map((user) => (
+            {data.map((user) => (
               <MenuItem key={user.id} value={user.id}>
                 {user.username}
               </MenuItem>
