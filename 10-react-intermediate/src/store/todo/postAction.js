@@ -1,0 +1,5 @@
+export const postAction = {
+  SET_LOADING: "SET_LOADING",
+  POPULATE_POST: "POPULATE_POST",
+  SET_ERROR: "SET_ERROR",
+};

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Backdrop,
   Box,
@@ -18,6 +19,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { UserContext } from "../../contexts/UserContext";
 
+import { addTodo } from "../../service/post";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,7 +39,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ModalForm = ({ isOpen, setOpen, saveTodo }) => {
+const ModalForm = ({ isOpen, setOpen }) => {
   const [newTodo, setNewTodo] = useState({
     isForEdit: false,
     todo: {
@@ -47,6 +50,7 @@ const ModalForm = ({ isOpen, setOpen, saveTodo }) => {
   });
 
   const { selectedUser } = useContext(UserContext);
+  const dispatch = useDispatch();
 
   const inputChange = (e) => {
     const key = e.target.name;
@@ -69,11 +73,16 @@ const ModalForm = ({ isOpen, setOpen, saveTodo }) => {
       authorId: selectedUser.id,
     };
 
-    try {
-      await saveTodo(todo);
-    } catch (error) {
-      console.log("error", error.message);
-    }
+    dispatch(addTodo(todo));
+    setOpen(false);
+    setNewTodo({
+      ...newTodo,
+      todo: {
+        title: "",
+        body: "",
+        published: false,
+      },
+    });
   };
 
   return (

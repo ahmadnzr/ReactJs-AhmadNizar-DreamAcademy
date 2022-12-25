@@ -1,36 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Typography, Box, Button } from "@mui/material";
 
 import TodoListTable from "./TodoListTable";
 import ModalForm from "./ModalForm";
-import { addTodo, fetchTodos } from "../../service/todo";
+import { fetchTodos } from "../../service/post";
 
 const Home = () => {
-  const [todos, setTodos] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-
-  const saveTodo = async (todo) => {
-    try {
-      await addTodo(todo);
-      await fetchTodoList();
-      setIsOpen(false);
-    } catch (error) {
-      console.log("error", error.message);
-    }
-  };
-
-  const fetchTodoList = async () => {
-    try {
-      const data = await fetchTodos();
-      setTodos(data);
-    } catch (error) {
-      console.log("error", error.message);
-    }
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchTodoList();
-  }, []);
+    dispatch(fetchTodos());
+  }, [dispatch]);
 
   return (
     <>
@@ -48,8 +30,8 @@ const Home = () => {
           Add New
         </Button>
       </Box>
-      <TodoListTable todos={todos} />
-      <ModalForm isOpen={isOpen} setOpen={setIsOpen} saveTodo={saveTodo} />
+      <TodoListTable />
+      <ModalForm isOpen={isOpen} setOpen={setIsOpen} saveTodo={() => {}} />
     </>
   );
 };

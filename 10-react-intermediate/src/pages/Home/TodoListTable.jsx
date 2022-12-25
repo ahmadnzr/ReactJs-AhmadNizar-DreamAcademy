@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useSelector } from "react-redux";
 import {
   Paper,
   styled,
@@ -54,8 +55,9 @@ const formatDate = (date) => {
     .join(" ");
 };
 
-const TodoListTable = ({ todos }) => {
+const TodoListTable = () => {
   const { data, selectedUser } = useContext(UserContext);
+  const { posts } = useSelector((state) => state.posts);
 
   const getUser = (userId) => {
     return data.find((user) => user.id === userId)?.username;
@@ -76,7 +78,7 @@ const TodoListTable = ({ todos }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {todos.map((row, i) => (
+          {posts.map((row, i) => (
             <StyledTableRow key={i}>
               <StyledTableCell component="th" scope="row">
                 {i + 1}
