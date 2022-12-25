@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Typography, Box, Button } from "@mui/material";
 
 import TodoListTable from "./TodoListTable";
-import ModalForm from "../../components/ModalForm";
+import ModalForm from "./ModalForm";
 import { addTodo, fetchTodos } from "../../service/todo";
 
 const Home = () => {

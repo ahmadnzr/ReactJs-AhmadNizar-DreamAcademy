@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const style = {
   position: "absolute",
