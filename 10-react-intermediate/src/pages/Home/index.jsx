@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Typography, Box, Button } from "@mui/material";
 
-import TodoListTable from "./TodoListTable";
 import ModalForm from "./ModalForm";
 import { fetchTodos } from "../../service/post";
+import TodoListTable from "./TodoListTable";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
