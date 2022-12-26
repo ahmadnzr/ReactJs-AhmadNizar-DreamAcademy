@@ -11,6 +11,8 @@ import {
   TableHead,
   TableBody,
   Button,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -57,75 +59,91 @@ const formatDate = (date) => {
 
 const TodoListTable = () => {
   const { data, selectedUser } = useContext(UserContext);
-  const { posts } = useSelector((state) => state.posts);
+  const { posts, isLoading } = useSelector((state) => state.posts);
 
   const getUser = (userId) => {
     return data.find((user) => user.id === userId)?.username;
   };
 
   return (
-    <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>#</StyledTableCell>
-            <StyledTableCell align="left">Title</StyledTableCell>
-            <StyledTableCell align="left">Author</StyledTableCell>
-            <StyledTableCell align="left">Created At</StyledTableCell>
-            <StyledTableCell align="left">Last Modified</StyledTableCell>
-            <StyledTableCell align="center">Published</StyledTableCell>
-            <StyledTableCell align="center">Action</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {posts.map((row, i) => (
-            <StyledTableRow key={i}>
-              <StyledTableCell component="th" scope="row">
-                {i + 1}
-              </StyledTableCell>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-                <MuiLink path={`posts/${row.id}`}>{row.title}</MuiLink>
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {getUser(row.authorId)}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {formatDate(row.createdAt)}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {formatDate(row.lastModified)}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {row.published ? (
-                  <CheckCircleIcon color="success" />
-                ) : (
-                  <CancelIcon color="error" />
-                )}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {selectedUser?.id === row.authorId ? (
-                  <>
-                    <Button size="small" color="warning" variant="outlined">
-                      Edit
-                    </Button>
-                    <Button
-                      size="small"
-                      color="error"
-                      variant="outlined"
-                      sx={{ marginLeft: "10px" }}
-                    >
-                      Delete
-                    </Button>
-                  </>
-                ) : (
-                  <span>Not Allowed</span>
-                )}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      {isLoading ? (
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>#</StyledTableCell>
+                <StyledTableCell align="left">Title</StyledTableCell>
+                <StyledTableCell align="left">Author</StyledTableCell>
+                <StyledTableCell align="left">Created At</StyledTableCell>
+                <StyledTableCell align="left">Last Modified</StyledTableCell>
+                <StyledTableCell align="center">Published</StyledTableCell>
+                <StyledTableCell align="center">Action</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {posts.map((row, i) => (
+                <StyledTableRow key={i}>
+                  <StyledTableCell component="th" scope="row">
+                    {i + 1}
+                  </StyledTableCell>
+                  <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+                    <MuiLink path={`posts/${row.id}`}>{row.title}</MuiLink>
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {getUser(row.authorId)}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {formatDate(row.createdAt)}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {formatDate(row.lastModified)}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.published ? (
+                      <CheckCircleIcon color="success" />
+                    ) : (
+                      <CancelIcon color="error" />
+                    )}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {selectedUser?.id === row.authorId ? (
+                      <>
+                        <Button size="small" color="warning" variant="outlined">
+                          Edit
+                        </Button>
+                        <Button
+                          size="small"
+                          color="error"
+                          variant="outlined"
+                          sx={{ marginLeft: "10px" }}
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    ) : (
+                      <span>Not Allowed</span>
+                    )}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </>
   );
 };
 
