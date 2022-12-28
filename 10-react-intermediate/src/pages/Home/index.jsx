@@ -4,7 +4,7 @@ import { Typography, Box, Button } from "@mui/material";
 
 import ModalForm from "./ModalForm";
 import { fetchTodos } from "../../service/post";
-import TodoListTable from "./TodoListTable";
+import PostListTable from "./PostListTable";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,7 @@ const Home = () => {
           Add New
         </Button>
       </Box>
-      <TodoListTable />
+      <PostListTable />
       <ModalForm isOpen={isOpen} setOpen={setIsOpen} saveTodo={() => {}} />
     </>
   );

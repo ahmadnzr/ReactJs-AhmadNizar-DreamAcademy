@@ -60,7 +60,7 @@ const formatDate = (date) => {
     .split(",")
     .join(" ");
 };
-const TodoListTable = () => {
+const PostListTable = () => {
   const { data, selectedUser } = useContext(UserContext);
   const { posts, isLoading } = useSelector((state) => state.posts);
   const [page, setPage] = React.useState(0);
@@ -208,4 +208,4 @@ const TodoListTable = () => {
   );
 };
 
-export default TodoListTable;
+export default PostListTable;

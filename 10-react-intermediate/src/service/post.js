@@ -1,6 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { postAction } from "../store/todo/postAction";
+import { postAction } from "../store/posts/postAction";
 
 const BASE_URL = "http://localhost:3000";
 
