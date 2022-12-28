@@ -23,7 +23,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { UserContext } from "../../../contexts/UserContext";
 import MuiLink from "../../../components/MuiLink";
 import TablePagination from "./TablePagination";
-import { deleteTodo } from "../../../service/post";
+import { deletePost } from "../../../service/post";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,7 +60,7 @@ const formatDate = (date) => {
     .split(",")
     .join(" ");
 };
-const PostListTable = () => {
+const PostListTable = ({ handleEditForm }) => {
   const { data, selectedUser } = useContext(UserContext);
   const { posts, isLoading } = useSelector((state) => state.posts);
   const [page, setPage] = React.useState(0);
@@ -96,7 +96,7 @@ const PostListTable = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteTodo(todoId));
+        dispatch(deletePost(todoId));
       }
     });
   };
@@ -163,7 +163,12 @@ const PostListTable = () => {
                   <StyledTableCell align="center">
                     {selectedUser?.id === row.authorId ? (
                       <>
-                        <Button size="small" color="warning" variant="outlined">
+                        <Button
+                          size="small"
+                          color="warning"
+                          variant="outlined"
+                          onClick={() => handleEditForm(row.id)}
+                        >
                           Edit
                         </Button>
                         <Button
