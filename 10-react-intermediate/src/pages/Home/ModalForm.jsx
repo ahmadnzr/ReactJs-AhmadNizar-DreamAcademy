@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   Backdrop,
@@ -19,7 +19,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { UserContext } from "../../contexts/UserContext";
 
-import { addTodo } from "../../service/post";
+import { addPost, editPost, findPost } from "../../service/post";
 
 const style = {
   position: "absolute",
@@ -39,14 +39,11 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ModalForm = ({ isOpen, setOpen }) => {
+const ModalForm = ({ isOpen, setOpen, forEdit, setForEdit }) => {
   const [newTodo, setNewTodo] = useState({
-    isForEdit: false,
-    todo: {
-      title: "",
-      body: "",
-      published: false,
-    },
+    title: "",
+    body: "",
+    published: false,
   });
 
   const { selectedUser } = useContext(UserContext);
@@ -56,10 +53,7 @@ const ModalForm = ({ isOpen, setOpen }) => {
     const key = e.target.name;
     setNewTodo((prev) => ({
       ...prev,
-      todo: {
-        ...prev.todo,
-        [key]: key === "published" ? e.target.checked : e.target.value,
-      },
+      [key]: key === "published" ? e.target.checked : e.target.value,
     }));
   };
 
@@ -67,23 +61,52 @@ const ModalForm = ({ isOpen, setOpen }) => {
     e.preventDefault();
 
     const todo = {
-      ...newTodo.todo,
-      createdAt: new Date().getTime(),
-      lastModified: new Date().getTime(),
+      ...newTodo,
       authorId: selectedUser.id,
     };
 
-    dispatch(addTodo(todo));
+    if (forEdit) {
+      dispatch(
+        editPost({ ...todo, lastModified: new Date().getTime() }, forEdit)
+      );
+    } else {
+      dispatch(
+        addPost({
+          ...todo,
+          createdAt: new Date().getTime(),
+          lastModified: new Date().getTime(),
+        })
+      );
+    }
+    resetInput();
     setOpen(false);
+    setForEdit(null);
+  };
+
+  const resetInput = () => {
+    setForEdit(null);
     setNewTodo({
-      ...newTodo,
-      todo: {
-        title: "",
-        body: "",
-        published: false,
-      },
+      title: "",
+      body: "",
+      published: false,
     });
   };
+
+  const handleCloseButton = () => {
+    setOpen(false);
+    resetInput();
+  };
+
+  useEffect(() => {
+    const getPost = async () => {
+      if (forEdit) {
+        const data = await findPost(forEdit);
+        setNewTodo(data);
+      }
+    };
+
+    getPost();
+  }, [forEdit]);
 
   return (
     <Modal
@@ -102,12 +125,14 @@ const ModalForm = ({ isOpen, setOpen }) => {
           <IconButton
             size="small"
             sx={{ position: "absolute", top: 4, right: 4 }}
-            onClick={() => setOpen(false)}
+            onClick={handleCloseButton}
           >
             <CloseIcon color="error" />
           </IconButton>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            Tambah Post
+            {typeof forEdit === "number"
+              ? "Edit Post :" + forEdit
+              : "Tambah Post"}
           </Typography>
           <StyledBox
             component={"form"}
@@ -117,7 +142,7 @@ const ModalForm = ({ isOpen, setOpen }) => {
             <FormGroup>
               <FormLabel id="post-title">Post Title</FormLabel>
               <TextField
-                value={newTodo.todo.title}
+                value={newTodo.title}
                 name="title"
                 onChange={inputChange}
                 required
@@ -129,7 +154,7 @@ const ModalForm = ({ isOpen, setOpen }) => {
                 multiline
                 rows={4}
                 name="body"
-                value={newTodo.todo.body}
+                value={newTodo.body}
                 onChange={inputChange}
               />
             </FormGroup>
@@ -137,7 +162,7 @@ const ModalForm = ({ isOpen, setOpen }) => {
               <FormControlLabel
                 control={<Switch />}
                 label="Publish"
-                checked={newTodo.todo.published}
+                checked={newTodo.published}
                 name="published"
                 onChange={inputChange}
               />
