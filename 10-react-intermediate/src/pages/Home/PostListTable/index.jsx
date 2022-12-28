@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Paper,
   styled,
@@ -15,6 +15,7 @@ import {
   Box,
   TableFooter,
 } from "@mui/material";
+import Swal from "sweetalert2";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -22,6 +23,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { UserContext } from "../../../contexts/UserContext";
 import MuiLink from "../../../components/MuiLink";
 import TablePagination from "./TablePagination";
+import { deleteTodo } from "../../../service/post";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -58,10 +60,11 @@ const formatDate = (date) => {
     .split(",")
     .join(" ");
 };
-const TodoListTable = () => {
+const PostListTable = () => {
   const { data, selectedUser } = useContext(UserContext);
   const { posts, isLoading } = useSelector((state) => state.posts);
   const [page, setPage] = React.useState(0);
+  const dispatch = useDispatch();
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -80,6 +83,22 @@ const TodoListTable = () => {
 
   const getUser = (userId) => {
     return data.find((user) => user.id === userId)?.username;
+  };
+
+  const handleDeleteTodo = (todoId) => {
+    return Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteTodo(todoId));
+      }
+    });
   };
 
   return (
@@ -152,6 +171,7 @@ const TodoListTable = () => {
                           color="error"
                           variant="outlined"
                           sx={{ marginLeft: "10px" }}
+                          onClick={() => handleDeleteTodo(row.id)}
                         >
                           Delete
                         </Button>
@@ -168,17 +188,19 @@ const TodoListTable = () => {
                 </TableRow>
               )}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  posts={posts}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  handleChangePage={handleChangePage}
-                  handleChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
+            {posts.length ? (
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    posts={posts}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    handleChangePage={handleChangePage}
+                    handleChangeRowsPerPage={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            ) : null}
           </Table>
         </TableContainer>
       )}
@@ -186,4 +208,4 @@ const TodoListTable = () => {
   );
 };
 
-export default TodoListTable;
+export default PostListTable;

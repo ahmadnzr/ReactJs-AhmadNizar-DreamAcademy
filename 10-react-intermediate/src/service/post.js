@@ -1,5 +1,6 @@
 import axios from "axios";
-import { postAction } from "../store/todo/postAction";
+import Swal from "sweetalert2";
+import { postAction } from "../store/posts/postAction";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -34,4 +35,20 @@ const addTodo = (todo) => {
   };
 };
 
-export { addTodo, fetchTodos };
+const deleteTodo = (todoId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: postAction.SET_LOADING });
+      await axios({
+        method: "delete",
+        url: BASE_URL + "/posts/" + todoId,
+      });
+      Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      dispatch(fetchTodos());
+    } catch (err) {
+      dispatch({ type: postAction.SET_ERROR, payload: err.message });
+    }
+  };
+};
+
+export { addTodo, fetchTodos, deleteTodo };
