@@ -24,6 +24,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import MuiLink from "../../../components/MuiLink";
 import TablePagination from "./TablePagination";
 import { deletePost } from "../../../service/post";
+import { formatDate } from "../../../utils/formatDate";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,21 +46,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const formatDate = (date) => {
-  const newDate = new Date(date);
-  return new Intl.DateTimeFormat("default", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-  })
-    .format(newDate)
-    .split(",")
-    .join(" ");
-};
 const PostListTable = ({ handleEditForm }) => {
   const { data, selectedUser } = useContext(UserContext);
   const { posts, isLoading } = useSelector((state) => state.posts);
