@@ -2,7 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { postAction } from "../store/posts/postAction";
 
-const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "http://localhost:3000";
 
 const fetchPosts = () => {
   return async (dispatch) => {
