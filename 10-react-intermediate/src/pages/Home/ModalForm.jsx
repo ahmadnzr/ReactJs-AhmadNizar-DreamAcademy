@@ -15,8 +15,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
+import { faker } from "@faker-js/faker";
 import CloseIcon from "@mui/icons-material/Close";
+
 import { UserContext } from "../../contexts/UserContext";
 
 import { addPost, editPost, findPost } from "../../service/post";
@@ -55,6 +56,17 @@ const ModalForm = ({ isOpen, setOpen, forEdit, setForEdit }) => {
       ...prev,
       [key]: key === "published" ? e.target.checked : e.target.value,
     }));
+  };
+
+  const handleCreateDummyPost = () => {
+    const title = faker.lorem.sentence(Math.ceil(Math.random() * 3 + 1));
+    const body = faker.lorem.paragraphs(Math.ceil(Math.random() * 5 + 1), "\n");
+
+    setNewTodo({
+      title,
+      body,
+      published: false,
+    });
   };
 
   const onSubmitForm = async (e) => {
@@ -129,11 +141,25 @@ const ModalForm = ({ isOpen, setOpen, forEdit, setForEdit }) => {
           >
             <CloseIcon color="error" />
           </IconButton>
-          <Typography id="transition-modal-title" variant="h6" component="h2">
-            {typeof forEdit === "number"
-              ? "Edit Post :" + forEdit
-              : "Tambah Post"}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              {typeof forEdit === "number"
+                ? "Edit Post :" + forEdit
+                : "Tambah Post"}
+            </Typography>
+            {typeof forEdit !== "number" ? (
+              <Button size="small" onClick={handleCreateDummyPost}>
+                Create dummy post
+              </Button>
+            ) : null}
+          </Box>
+
           <StyledBox
             component={"form"}
             onSubmit={onSubmitForm}
