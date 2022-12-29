@@ -13,7 +13,6 @@ import {
   Button,
   CircularProgress,
   Box,
-  TableFooter,
 } from "@mui/material";
 import Swal from "sweetalert2";
 
@@ -179,20 +178,23 @@ const PostListTable = ({ handleEditForm }) => {
                 </TableRow>
               )}
             </TableBody>
-            {posts.length ? (
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    posts={posts}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    handleChangePage={handleChangePage}
-                    handleChangeRowsPerPage={handleChangeRowsPerPage}
-                  />
-                </TableRow>
-              </TableFooter>
-            ) : null}
           </Table>
+          {posts.length ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <TablePagination
+                posts={posts}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                handleChangePage={handleChangePage}
+                handleChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </Box>
+          ) : null}
         </TableContainer>
       )}
     </>
